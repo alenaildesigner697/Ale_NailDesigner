@@ -53,6 +53,23 @@
     <!-- Sistema de Notificações Pop-up Interno (Toast) -->
     <div id="toast-container" class="fixed bottom-4 left-4 right-4 sm:left-auto sm:right-6 sm:bottom-6 z-[100] flex flex-col gap-2 pointer-events-none"></div>
 
+    <!-- Modal de Confirmação Customizado (Substitui o confirm do navegador) -->
+    <div id="custom-confirm-modal" class="fixed inset-0 z-[110] bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-sm w-full p-6 space-y-5 shadow-2xl relative text-center">
+            <div class="w-12 h-12 bg-red-50 text-red-600 rounded-2xl flex items-center justify-center text-xl mx-auto">
+                <i class="fas fa-triangle-exclamation"></i>
+            </div>
+            <div class="space-y-2">
+                <h3 class="font-serif text-xl font-bold text-stone-900">Confirmação</h3>
+                <p id="confirm-message" class="text-stone-500 text-xs leading-relaxed">Tem a certeza de que deseja realizar esta ação?</p>
+            </div>
+            <div class="grid grid-cols-2 gap-3 pt-2">
+                <button id="btn-confirm-no" class="bg-stone-100 hover:bg-stone-200 text-stone-700 font-medium py-2.5 rounded-xl text-xs transition">Cancelar</button>
+                <button id="btn-confirm-yes" class="bg-red-600 hover:bg-red-700 text-white font-medium py-2.5 rounded-xl text-xs transition shadow-sm">Sim, Excluir</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Header / Navbar -->
     <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-stone-100 shadow-sm">
         <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
@@ -69,12 +86,10 @@
             </nav>
 
             <div class="hidden sm:flex items-center gap-2 sm:gap-3">
-                <!-- Botão Admin -->
                 <button id="btn-open-admin" class="hidden text-xs font-medium bg-brand-600 hover:bg-brand-700 text-white px-3.5 py-2 rounded-full transition items-center gap-2 shadow-sm">
                     <i class="fas fa-chart-line"></i> Dashboard Admin
                 </button>
 
-                <!-- Área de Perfil / Login -->
                 <div id="auth-header-container">
                     <button id="btn-open-login" class="text-xs font-medium bg-stone-100 hover:bg-stone-200 text-stone-700 px-3.5 py-2 rounded-full transition flex items-center gap-1.5">
                         <i class="fas fa-user-circle text-brand-600 text-base"></i> Entrar
@@ -136,7 +151,6 @@
                 <p class="text-stone-500 text-xs">Entre para gerir as suas avaliações no salão</p>
             </div>
 
-            <!-- Botão Google -->
             <button id="btn-google-login" class="w-full border border-stone-300 hover:bg-stone-50 text-stone-700 font-medium py-2.5 rounded-xl text-xs sm:text-sm transition flex items-center justify-center gap-3 shadow-sm">
                 <i class="fab fa-google text-red-500"></i> Continuar com o Google
             </button>
@@ -147,7 +161,6 @@
                 <div class="flex-grow border-t border-stone-200"></div>
             </div>
 
-            <!-- Formulário E-mail e Senha -->
             <form id="form-email-auth" class="space-y-3.5">
                 <div>
                     <label class="block text-xs font-medium text-stone-600 mb-1">E-mail</label>
@@ -170,7 +183,6 @@
     <div id="admin-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-2 sm:p-6">
         <div class="bg-white rounded-3xl max-w-5xl w-full max-h-[95vh] sm:max-h-[92vh] shadow-2xl relative flex flex-col md:flex-row overflow-hidden border border-stone-100">
             
-            <!-- Sidebar / Menu Lateral -->
             <div class="w-full md:w-64 bg-stone-900 text-stone-300 p-4 sm:p-6 flex flex-col justify-between shrink-0 space-y-4 md:space-y-6">
                 <div class="space-y-4 md:space-y-6">
                     <div class="flex items-center justify-between">
@@ -186,7 +198,6 @@
                         <button id="btn-close-admin-mobile" class="md:hidden text-stone-400 hover:text-white p-1"><i class="fas fa-times text-lg"></i></button>
                     </div>
 
-                    <!-- Abas -->
                     <nav class="flex md:flex-col gap-1.5 overflow-x-auto pb-1 md:pb-0 text-xs font-medium">
                         <button id="tab-btn-overview" class="tab-btn active shrink-0 md:w-full flex items-center gap-2 sm:gap-3 px-3 py-2 sm:px-3.5 sm:py-2.5 rounded-xl transition bg-stone-800 text-white">
                             <i class="fas fa-chart-pie text-brand-500 w-4"></i> Visão Geral
@@ -207,7 +218,6 @@
                 </div>
             </div>
 
-            <!-- Conteúdo do Dashboard -->
             <div class="flex-grow p-4 sm:p-6 overflow-y-auto bg-stone-50 space-y-6">
                 
                 <!-- ABA 1: VISÃO GERAL -->
@@ -546,7 +556,6 @@
                     </div>
                 </div>
 
-                <!-- Novas fotos da galeria aparecem aqui -->
                 <div id="lista-galeria-dinamica" class="contents"></div>
             </div>
         </div>
@@ -634,7 +643,7 @@
         let fotoBase64 = "";
         let galleryBase64 = "";
 
-        // Toast
+        // Função Toast Notificação
         function showToast(message, type = 'success') {
             const container = document.getElementById('toast-container');
             const toast = document.createElement('div');
@@ -652,6 +661,29 @@
                 setTimeout(() => toast.remove(), 300);
             }, 3500);
         }
+
+        // Sistema de Confirmação Personalizado (Substitui o confirm() do navegador)
+        const confirmModal = document.getElementById('custom-confirm-modal');
+        const confirmMessage = document.getElementById('confirm-message');
+        const btnConfirmYes = document.getElementById('btn-confirm-yes');
+        const btnConfirmNo = document.getElementById('btn-confirm-no');
+        let confirmCallback = null;
+
+        function customConfirm(message, callback) {
+            confirmMessage.textContent = message;
+            confirmCallback = callback;
+            confirmModal.classList.remove('hidden');
+        }
+
+        btnConfirmYes.onclick = () => {
+            confirmModal.classList.add('hidden');
+            if (confirmCallback) confirmCallback();
+        };
+
+        btnConfirmNo.onclick = () => {
+            confirmModal.classList.add('hidden');
+            confirmCallback = null;
+        };
 
         // Menu Mobile Toggle
         const btnToggleMenu = document.getElementById('btn-toggle-menu');
@@ -976,7 +1008,7 @@
             editServiceIdInput.value = "";
             document.getElementById('service-icon').value = "fas fa-hand-sparkles";
             btnCancelServiceEdit.classList.add('hidden');
-            serviceFormTitle.innerHTML = '<i class="fas fa-plus-circle text-brand-600"></i> Cadastrar Novo Serviço';
+            serviceFormTitle.innerHTML = '<i class="fas fa-plus-circle text-brand-600"></i> Cadastrar / Editar Serviço';
             btnSubmitService.innerHTML = '<i class="fas fa-save"></i> Salvar Serviço';
         }
 
@@ -1027,12 +1059,12 @@
                 });
 
                 document.querySelectorAll('.btn-del-gallery').forEach(btn => {
-                    btn.addEventListener('click', async (e) => {
+                    btn.addEventListener('click', (e) => {
                         const id = e.currentTarget.getAttribute('data-id');
-                        if (confirm('Deseja excluir esta foto da galeria?')) {
+                        customConfirm('Deseja excluir esta foto da galeria?', async () => {
                             await deleteDoc(doc(db, "galeria", id));
                             showToast("Foto excluída da galeria.");
-                        }
+                        });
                     });
                 });
             });
@@ -1117,12 +1149,12 @@
                 });
 
                 document.querySelectorAll('.btn-del-service').forEach(btn => {
-                    btn.addEventListener('click', async (e) => {
+                    btn.addEventListener('click', (e) => {
                         const id = e.currentTarget.getAttribute('data-id');
-                        if (confirm('Deseja excluir este serviço?')) {
+                        customConfirm('Deseja excluir este serviço?', async () => {
                             await deleteDoc(doc(db, "servicos", id));
                             showToast("Serviço excluído com sucesso.");
-                        }
+                        });
                     });
                 });
             });
@@ -1292,12 +1324,12 @@
                 });
 
                 document.querySelectorAll('.btn-delete').forEach(btn => {
-                    btn.addEventListener('click', async (e) => {
+                    btn.addEventListener('click', (e) => {
                         const id = e.currentTarget.getAttribute('data-id');
-                        if (confirm('Deseja realmente excluir a sua avaliação?')) {
+                        customConfirm('Deseja realmente excluir a sua avaliação?', async () => {
                             await deleteDoc(doc(db, "avaliacoes", id));
                             showToast("Avaliação excluída com sucesso.");
-                        }
+                        });
                     });
                 });
 
