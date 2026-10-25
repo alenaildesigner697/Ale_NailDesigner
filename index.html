@@ -45,20 +45,72 @@
 
     <!-- Header / Navbar -->
     <header class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-stone-100 shadow-sm">
-        <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
+        <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
             <a href="#" class="font-serif text-2xl font-bold tracking-tight text-brand-700">
                 Ale<span class="text-stone-700 font-normal">_Naildesigner</span>
             </a>
-            <nav class="hidden md:flex space-x-8 text-sm font-medium text-stone-600">
+            <nav class="hidden md:flex space-x-6 text-sm font-medium text-stone-600">
                 <a href="#sobre" class="hover:text-brand-600 transition">Sobre Mim</a>
                 <a href="#servicos" class="hover:text-brand-600 transition">Serviços</a>
                 <a href="#avaliacoes" class="hover:text-brand-600 transition">Avaliações</a>
             </nav>
-            <a href="https://wa.me/5531992212015?text=Ol%C3%A1%20gostaria%20de%20agenda%20minhas%20unhas%2C%20quais%20horarios%20possui%20disponiveis%3F" target="_blank" class="bg-brand-600 text-white px-5 py-2.5 rounded-full text-sm font-medium hover:bg-brand-700 transition shadow-sm hover:shadow-md flex items-center gap-2">
-                <i class="fab font-bold fa-whatsapp text-lg"></i> Agendar Unhas
-            </a>
+            <div class="flex items-center gap-3">
+                <!-- Área de Perfil / Login -->
+                <div id="auth-header-container">
+                    <button id="btn-open-login" class="text-xs font-medium bg-stone-100 hover:bg-stone-200 text-stone-700 px-4 py-2 rounded-full transition flex items-center gap-2">
+                        <i class="fas fa-user-circle text-brand-600 text-base"></i> Entrar / Conta
+                    </button>
+                </div>
+                <div id="user-logged-info" class="hidden items-center gap-2 bg-stone-100 px-3 py-1.5 rounded-full text-xs font-medium text-stone-700">
+                    <span id="user-display-name">Minha Conta</span>
+                    <button id="btn-logout" class="text-stone-400 hover:text-red-600 ml-1" title="Sair"><i class="fas fa-sign-out-alt"></i></button>
+                </div>
+
+                <a href="https://wa.me/5531992212015?text=Ol%C3%A1%20gostaria%20de%20agenda%20minhas%20unhas%2C%20quais%20horarios%20possui%20disponiveis%3F" target="_blank" class="bg-brand-600 text-white px-4 py-2 rounded-full text-xs sm:text-sm font-medium hover:bg-brand-700 transition shadow-sm flex items-center gap-2">
+                    <i class="fab font-bold fa-whatsapp text-base"></i> Agendar
+                </a>
+            </div>
         </div>
     </header>
+
+    <!-- Modal de Login / Cadastro -->
+    <div id="login-modal" class="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 space-y-6 shadow-2xl relative animate-fade-in">
+            <button id="btn-close-modal" class="absolute top-4 right-4 text-stone-400 hover:text-stone-600 text-lg"><i class="fas fa-times"></i></button>
+            <div class="text-center space-y-1">
+                <h3 class="font-serif text-2xl font-bold text-stone-900" id="modal-title">Acessar sua Conta</h3>
+                <p class="text-stone-500 text-xs">Entre para gerenciar suas avaliações no salão</p>
+            </div>
+
+            <!-- Botão Google -->
+            <button id="btn-google-login" class="w-full border border-stone-300 hover:bg-stone-50 text-stone-700 font-medium py-2.5 rounded-xl text-sm transition flex items-center justify-center gap-3 shadow-sm">
+                <i class="fab fa-google text-red-500"></i> Continuar com o Google
+            </button>
+
+            <div class="flex items-center my-4">
+                <div class="flex-grow border-t border-stone-200"></div>
+                <span class="px-3 text-stone-400 text-xs uppercase">ou com e-mail</span>
+                <div class="flex-grow border-t border-stone-200"></div>
+            </div>
+
+            <!-- Formulário E-mail e Senha -->
+            <form id="form-email-auth" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-medium text-stone-600 mb-1">E-mail</label>
+                    <input type="email" id="auth-email" required placeholder="seu@email.com" class="w-full px-3 py-2 text-sm rounded-lg border border-stone-300 focus:outline-none focus:border-brand-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-stone-600 mb-1">Senha</label>
+                    <input type="password" id="auth-password" required placeholder="••••••••" class="w-full px-3 py-2 text-sm rounded-lg border border-stone-300 focus:outline-none focus:border-brand-500">
+                </div>
+                <button type="submit" id="btn-submit-auth" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-medium py-2.5 rounded-xl text-sm transition">Entrar</button>
+            </form>
+
+            <div class="text-center pt-2">
+                <button type="button" id="toggle-auth-mode" class="text-xs text-brand-600 hover:underline font-medium">Não tem uma conta? Cadastre-se</button>
+            </div>
+        </div>
+    </div>
 
     <!-- Banner Principal / Hero -->
     <section class="py-20 px-4 bg-gradient-to-b from-brand-50/60 to-transparent">
@@ -197,7 +249,7 @@
                     <input type="hidden" id="edit-id" value="">
                     <div>
                         <label class="block text-xs font-medium text-stone-600 mb-1">Seu Nome</label>
-                        <input type="text" id="nome-cliente" required placeholder="Digite seu nome completo" class="w-full px-3 py-2 text-sm rounded-lg border border-stone-300 focus:outline-none focus:border-brand-500 bg-white">
+                        <input type="text" id="nome-cliente" required placeholder="Faça login ou digite seu nome" class="w-full px-3 py-2 text-sm rounded-lg border border-stone-300 focus:outline-none focus:border-brand-500 bg-white">
                     </div>
                     <div>
                         <label class="block text-xs font-medium text-stone-600 mb-1">Sua Avaliação</label>
@@ -263,9 +315,8 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, deleteDoc, doc, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-        import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getAuth, signInWithPopup, GoogleAuthProvider, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-        // Sua configuração oficial obtida no painel
         const firebaseConfig = {
             apiKey: "AIzaSyCHMdB3LqXsgnyMIEX67LBVyslWNQiBaOw",
             authDomain: "ale-naildesigner.firebaseapp.com",
@@ -276,25 +327,102 @@
             measurementId: "G-189RH6X1HF"
         };
 
-        // Inicializar Firebase
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         const auth = getAuth(app);
+        const googleProvider = new GoogleAuthProvider();
 
         let currentUser = null;
         let selectedRating = 5;
+        let isSignUpMode = false;
 
-        // Login Anônimo Automático para identificar o usuário
-        signInAnonymously(auth).catch(err => console.error("Erro na auth:", err));
+        // Controle do Modal de Login
+        const modal = document.getElementById('login-modal');
+        document.getElementById('btn-open-login').addEventListener('click', () => modal.classList.remove('hidden'));
+        document.getElementById('btn-close-modal').addEventListener('click', () => modal.classList.add('hidden'));
 
+        // Alternar entre Entrar e Cadastrar
+        const toggleAuthBtn = document.getElementById('toggle-auth-mode');
+        const modalTitle = document.getElementById('modal-title');
+        const btnSubmitAuth = document.getElementById('btn-submit-auth');
+
+        toggleAuthBtn.addEventListener('click', () => {
+            isSignUpMode = !isSignUpMode;
+            if (isSignUpMode) {
+                modalTitle.textContent = "Criar Nova Conta";
+                btnSubmitAuth.textContent = "Cadastrar";
+                toggleAuthBtn.textContent = "Já tem uma conta? Entre aqui";
+            } else {
+                modalTitle.textContent = "Acessar sua Conta";
+                btnSubmitAuth.textContent = "Entrar";
+                toggleAuthBtn.textContent = "Não tem uma conta? Cadastre-se";
+            }
+        });
+
+        // Google Login
+        document.getElementById('btn-google-login').addEventListener('click', async () => {
+            try {
+                await signInWithPopup(auth, googleProvider);
+                modal.classList.add('hidden');
+            } catch (error) {
+                console.error("Erro no login com Google:", error);
+                alert("Erro ao autenticar com o Google. Verifique se o provedor está ativado no Firebase.");
+            }
+        });
+
+        // Email & Password Auth Submit
+        document.getElementById('form-email-auth').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('auth-email').value;
+            const password = document.getElementById('auth-password').value;
+
+            try {
+                if (isSignUpMode) {
+                    await createUserWithEmailAndPassword(auth, email, password);
+                } else {
+                    await signInWithEmailAndPassword(auth, email, password);
+                }
+                modal.classList.add('hidden');
+            } catch (error) {
+                console.error("Erro na autenticação:", error);
+                alert("Erro: " + error.message);
+            }
+        });
+
+        // Logout
+        document.getElementById('btn-logout').addEventListener('click', () => {
+            signOut(auth);
+        });
+
+        // Monitor de Estado de Autenticação
         onAuthStateChanged(auth, (user) => {
+            currentUser = user;
+            const btnOpenLogin = document.getElementById('btn-open-login');
+            const userLoggedInfo = document.getElementById('user-logged-info');
+            const userDisplayName = document.getElementById('user-display-name');
+            const nomeInput = document.getElementById('nome-cliente');
+
             if (user) {
-                currentUser = user;
+                btnOpenLogin.classList.add('hidden');
+                userLoggedInfo.classList.remove('hidden');
+                userLoggedInfo.classList.add('flex');
+                
+                const nameOrEmail = user.displayName || user.email.split('@')[0];
+                userDisplayName.textContent = nameOrEmail;
+                nomeInput.value = nameOrEmail;
+                nomeInput.readOnly = true;
+                carregarAvaliacoes();
+            } else {
+                btnOpenLogin.classList.remove('hidden');
+                userLoggedInfo.classList.add('hidden');
+                userLoggedInfo.classList.remove('flex');
+                nomeInput.value = '';
+                nomeInput.readOnly = false;
                 carregarAvaliacoes();
             }
         });
 
-        // Controle da Interface das Estrelas
+        // Controle das Estrelas
         const stars = document.querySelectorAll('#star-container i');
         function updateStars(rating) {
             stars.forEach((star, index) => {
@@ -316,7 +444,7 @@
             });
         });
 
-        // Form Submit (Criar ou Editar)
+        // Formulário de Avaliação
         const form = document.getElementById('form-avaliacao');
         const editIdInput = document.getElementById('edit-id');
         const btnSubmit = document.getElementById('btn-submit');
@@ -324,7 +452,11 @@
 
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
-            if (!currentUser) return alert('Autenticando... tente novamente em alguns segundos.');
+            if (!currentUser) {
+                modal.classList.remove('hidden');
+                alert("Por favor, faça login para enviar uma avaliação.");
+                return;
+            }
 
             const nome = document.getElementById('nome-cliente').value.trim();
             const mensagem = document.getElementById('mensagem-cliente').value.trim();
@@ -334,7 +466,6 @@
 
             try {
                 if (editId) {
-                    // Atualizar
                     await updateDoc(doc(db, "avaliacoes", editId), {
                         nome: nome,
                         mensagem: mensagem,
@@ -343,7 +474,6 @@
                     });
                     resetForm();
                 } else {
-                    // Criar
                     await addDoc(collection(db, "avaliacoes"), {
                         uid: currentUser.uid,
                         nome: nome,
@@ -366,11 +496,14 @@
             editIdInput.value = "";
             selectedRating = 5;
             updateStars(5);
+            if(currentUser) {
+                document.getElementById('nome-cliente').value = currentUser.displayName || currentUser.email.split('@')[0];
+            }
             btnSubmit.textContent = "Enviar Avaliação";
             btnCancel.classList.add('hidden');
         }
 
-        // Ler Avaliações em Tempo Real (Firestore Snapshot)
+        // Carregar Avaliações em Tempo Real
         function carregarAvaliacoes() {
             const q = query(collection(db, "avaliacoes"), orderBy("createdAt", "desc"));
             onSnapshot(q, (snapshot) => {
@@ -411,7 +544,6 @@
                     container.appendChild(card);
                 });
 
-                // Registrar eventos de Edição e Exclusão
                 document.querySelectorAll('.btn-delete').forEach(btn => {
                     btn.addEventListener('click', async (e) => {
                         const id = e.currentTarget.getAttribute('data-id');
