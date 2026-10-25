@@ -75,7 +75,7 @@
 
     <!-- Modal de Login / Cadastro -->
     <div id="login-modal" class="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl max-w-md w-full p-6 space-y-6 shadow-2xl relative animate-fade-in">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 space-y-6 shadow-2xl relative">
             <button id="btn-close-modal" class="absolute top-4 right-4 text-stone-400 hover:text-stone-600 text-lg"><i class="fas fa-times"></i></button>
             <div class="text-center space-y-1">
                 <h3 class="font-serif text-2xl font-bold text-stone-900" id="modal-title">Acessar sua Conta</h3>
@@ -108,6 +108,74 @@
 
             <div class="text-center pt-2">
                 <button type="button" id="toggle-auth-mode" class="text-xs text-brand-600 hover:underline font-medium">Não tem uma conta? Cadastre-se</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Adicionar / Editar Comentário -->
+    <div id="comment-modal" class="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-lg w-full p-6 space-y-5 shadow-2xl relative">
+            <button id="btn-close-comment-modal" class="absolute top-4 right-4 text-stone-400 hover:text-stone-600 text-lg"><i class="fas fa-times"></i></button>
+            
+            <div class="text-center space-y-1 border-b border-stone-100 pb-3">
+                <h3 class="font-serif text-2xl font-bold text-stone-900" id="comment-modal-title">Deixar uma Avaliação</h3>
+                <p class="text-stone-500 text-xs">Compartilhe sua experiência no salão da Alê</p>
+            </div>
+
+            <form id="form-avaliacao" class="space-y-4">
+                <input type="hidden" id="edit-id" value="">
+                
+                <div>
+                    <label class="block text-xs font-medium text-stone-600 mb-1">Sua Nota</label>
+                    <div class="star-rating flex gap-2 text-amber-400 text-2xl" id="star-container">
+                        <i class="far fa-star" data-rating="1"></i>
+                        <i class="far fa-star" data-rating="2"></i>
+                        <i class="far fa-star" data-rating="3"></i>
+                        <i class="far fa-star" data-rating="4"></i>
+                        <i class="far fa-star" data-rating="5"></i>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-medium text-stone-600 mb-1">Seu Nome</label>
+                    <input type="text" id="nome-cliente" required placeholder="Digite seu nome" class="w-full px-3 py-2 text-sm rounded-lg border border-stone-300 focus:outline-none focus:border-brand-500 bg-white">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-medium text-stone-600 mb-1">Seu Comentário</label>
+                    <textarea id="mensagem-cliente" rows="3" required placeholder="Escreva sobre suas unhas, atendimento, durabilidade..." class="w-full px-3 py-2 text-sm rounded-lg border border-stone-300 focus:outline-none focus:border-brand-500 bg-white resize-none"></textarea>
+                </div>
+
+                <!-- Upload de Foto Opcional da Galeria -->
+                <div>
+                    <label class="block text-xs font-medium text-stone-600 mb-1">Foto da sua unha (Opcional)</label>
+                    <input type="file" id="foto-unha" accept="image/*" class="w-full text-xs text-stone-500 file:mr-3 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-brand-50 file:text-brand-700 hover:file:bg-brand-100 cursor-pointer">
+                    <div id="preview-foto-container" class="mt-2 hidden">
+                        <img id="preview-foto" src="" alt="Preview" class="h-20 w-20 object-cover rounded-xl border border-stone-200">
+                    </div>
+                </div>
+
+                <button type="submit" id="btn-submit" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-medium py-3 rounded-xl text-sm transition shadow-sm">
+                    Publicar Avaliação
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal "Ver Todos os Comentários" -->
+    <div id="all-comments-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4 sm:p-6">
+        <div class="bg-white rounded-3xl max-w-4xl w-full max-h-[85vh] p-6 space-y-6 shadow-2xl relative flex flex-col">
+            <div class="flex justify-between items-center border-b border-stone-100 pb-4">
+                <div>
+                    <h3 class="font-serif text-2xl font-bold text-stone-900">Todas as Avaliações</h3>
+                    <p class="text-stone-500 text-xs">O que nossas clientes dizem sobre o Ale_Naildesigner</p>
+                </div>
+                <button id="btn-close-all-comments" class="text-stone-400 hover:text-stone-600 text-xl w-8 h-8 rounded-full bg-stone-100 flex items-center justify-center"><i class="fas fa-times"></i></button>
+            </div>
+
+            <!-- Lista Rovel com Scroll -->
+            <div id="lista-avaliacoes-modal" class="overflow-y-auto space-y-4 pr-2 flex-grow max-h-[60vh]">
+                <!-- Renderização dinâmica dos comentários -->
             </div>
         </div>
     </div>
@@ -235,43 +303,26 @@
         </div>
     </section>
 
-    <!-- Seção Avaliações (Firebase Firestore Sync) -->
+    <!-- Seção Avaliações (Área Preta & Área Vermelha Conforme Solicitado) -->
     <section id="avaliacoes" class="py-16 px-4 bg-brand-50/30">
         <div class="max-w-6xl mx-auto space-y-8">
+            <!-- Cabeçalho Principal -->
             <div class="text-center space-y-2">
                 <span class="text-brand-600 font-semibold text-xs uppercase tracking-widest bg-brand-100/70 px-3 py-1 rounded-full">Depoimentos</span>
                 <h2 class="font-serif text-3xl sm:text-4xl font-bold text-slate-800">O que dizem nossas clientes</h2>
             </div>
 
-            <!-- Formulário Bem Compacto e Discreto -->
-            <div class="bg-white p-4 sm:p-5 rounded-2xl border border-stone-200/80 max-w-md mx-auto shadow-sm">
-                <form id="form-avaliacao" class="space-y-3">
-                    <input type="hidden" id="edit-id" value="">
-                    <div class="flex items-center justify-between gap-2 border-b border-stone-100 pb-2">
-                        <span class="text-xs font-medium text-stone-500">Deixe sua nota:</span>
-                        <div class="star-rating flex gap-1.5 text-amber-400 text-lg" id="star-container">
-                            <i class="far fa-star" data-rating="1"></i>
-                            <i class="far fa-star" data-rating="2"></i>
-                            <i class="far fa-star" data-rating="3"></i>
-                            <i class="far fa-star" data-rating="4"></i>
-                            <i class="far fa-star" data-rating="5"></i>
-                        </div>
-                    </div>
-                    
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                        <input type="text" id="nome-cliente" required placeholder="Seu nome" class="w-full px-3 py-1.5 text-xs rounded-lg border border-stone-200 focus:outline-none focus:border-brand-500 bg-stone-50/50">
-                        <button type="submit" id="btn-submit" class="w-full bg-brand-600 text-white text-xs font-medium py-1.5 rounded-lg hover:bg-brand-700 transition">Publicar Comentário</button>
-                    </div>
-
-                    <div>
-                        <textarea id="mensagem-cliente" rows="2" required placeholder="Escreva um rápido comentário..." class="w-full px-3 py-1.5 text-xs rounded-lg border border-stone-200 focus:outline-none focus:border-brand-500 bg-stone-50/50 resize-none"></textarea>
-                    </div>
-                    
-                    <button type="button" id="btn-cancel" class="hidden w-full bg-stone-200 text-stone-700 text-xs font-medium py-1 rounded-lg hover:bg-stone-300 transition">Cancelar Edição</button>
-                </form>
+            <!-- Área Preta da Imagem: Botões de Ação Principais -->
+            <div class="flex flex-col sm:flex-row justify-center items-center gap-4 py-2">
+                <button id="btn-open-comment-modal" class="bg-brand-600 hover:bg-brand-700 text-white font-medium px-6 py-3 rounded-full text-sm transition shadow-md hover:shadow-lg flex items-center gap-2">
+                    <i class="fas fa-plus-circle"></i> Adicione seu comentário
+                </button>
+                <button id="btn-open-all-comments" class="bg-white hover:bg-stone-50 text-stone-700 font-medium px-6 py-3 rounded-full text-sm transition border border-stone-200 shadow-sm flex items-center gap-2">
+                    <i class="fas fa-comments text-brand-600"></i> Ver todos os comentários
+                </button>
             </div>
 
-            <!-- Lista de Comentários (Estilo Caixas Grandes e Decoradas - Sem aspas) -->
+            <!-- Área Vermelha da Imagem: Cards com Estrelas, Comentário, Foto e Perfil -->
             <div id="lista-avaliacoes" class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-2">
                 <p class="text-center text-stone-400 text-sm col-span-3 py-8">Carregando avaliações...</p>
             </div>
@@ -334,13 +385,31 @@
         let currentUser = null;
         let selectedRating = 5;
         let isSignUpMode = false;
+        let fotoBase64 = "";
 
-        // Controle do Modal de Login
-        const modal = document.getElementById('login-modal');
-        document.getElementById('btn-open-login').addEventListener('click', () => modal.classList.remove('hidden'));
-        document.getElementById('btn-close-modal').addEventListener('click', () => modal.classList.add('hidden'));
+        // Modais
+        const loginModal = document.getElementById('login-modal');
+        const commentModal = document.getElementById('comment-modal');
+        const allCommentsModal = document.getElementById('all-comments-modal');
 
-        // Alternar entre Entrar e Cadastrar
+        document.getElementById('btn-open-login').addEventListener('click', () => loginModal.classList.remove('hidden'));
+        document.getElementById('btn-close-modal').addEventListener('click', () => loginModal.classList.add('hidden'));
+
+        document.getElementById('btn-open-comment-modal').addEventListener('click', () => {
+            if (!currentUser) {
+                loginModal.classList.remove('hidden');
+                alert("Por favor, faça login para publicar uma avaliação.");
+                return;
+            }
+            commentModal.classList.remove('hidden');
+        });
+
+        document.getElementById('btn-close-comment-modal').addEventListener('click', () => commentModal.classList.add('hidden'));
+
+        document.getElementById('btn-open-all-comments').addEventListener('click', () => allCommentsModal.classList.remove('hidden'));
+        document.getElementById('btn-close-all-comments').addEventListener('click', () => allCommentsModal.classList.add('hidden'));
+
+        // Toggle Auth
         const toggleAuthBtn = document.getElementById('toggle-auth-mode');
         const modalTitle = document.getElementById('modal-title');
         const btnSubmitAuth = document.getElementById('btn-submit-auth');
@@ -362,14 +431,14 @@
         document.getElementById('btn-google-login').addEventListener('click', async () => {
             try {
                 await signInWithPopup(auth, googleProvider);
-                modal.classList.add('hidden');
+                loginModal.classList.add('hidden');
             } catch (error) {
                 console.error("Erro no login com Google:", error);
-                alert("Erro ao autenticar com o Google. Verifique se o provedor está ativado no Firebase.");
+                alert("Erro ao autenticar com o Google.");
             }
         });
 
-        // Email & Password Auth Submit
+        // Email/Senha Auth
         document.getElementById('form-email-auth').addEventListener('submit', async (e) => {
             e.preventDefault();
             const email = document.getElementById('auth-email').value;
@@ -381,19 +450,15 @@
                 } else {
                     await signInWithEmailAndPassword(auth, email, password);
                 }
-                modal.classList.add('hidden');
+                loginModal.classList.add('hidden');
             } catch (error) {
-                console.error("Erro na autenticação:", error);
                 alert("Erro: " + error.message);
             }
         });
 
-        // Logout
-        document.getElementById('btn-logout').addEventListener('click', () => {
-            signOut(auth);
-        });
+        document.getElementById('btn-logout').addEventListener('click', () => signOut(auth));
 
-        // Monitor de Estado de Autenticação
+        // Monitor Auth
         onAuthStateChanged(auth, (user) => {
             currentUser = user;
             const btnOpenLogin = document.getElementById('btn-open-login');
@@ -410,18 +475,38 @@
                 userDisplayName.textContent = nameOrEmail;
                 nomeInput.value = nameOrEmail;
                 nomeInput.readOnly = true;
-                carregarAvaliacoes();
             } else {
                 btnOpenLogin.classList.remove('hidden');
                 userLoggedInfo.classList.add('hidden');
                 userLoggedInfo.classList.remove('flex');
                 nomeInput.value = '';
                 nomeInput.readOnly = false;
-                carregarAvaliacoes();
+            }
+            carregarAvaliacoes();
+        });
+
+        // Preview de Foto da Galeria (Leitura em Base64)
+        const inputFoto = document.getElementById('foto-unha');
+        const previewFotoContainer = document.getElementById('preview-foto-container');
+        const previewFoto = document.getElementById('preview-foto');
+
+        inputFoto.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    fotoBase64 = event.target.result;
+                    previewFoto.src = fotoBase64;
+                    previewFotoContainer.classList.remove('hidden');
+                };
+                reader.readAsDataURL(file);
+            } else {
+                fotoBase64 = "";
+                previewFotoContainer.classList.add('hidden');
             }
         });
 
-        // Controle das Estrelas
+        // Estrelas
         const stars = document.querySelectorAll('#star-container i');
         function updateStars(rating) {
             stars.forEach((star, index) => {
@@ -443,19 +528,13 @@
             });
         });
 
-        // Formulário de Avaliação
+        // Form Comment Submit
         const form = document.getElementById('form-avaliacao');
         const editIdInput = document.getElementById('edit-id');
-        const btnSubmit = document.getElementById('btn-submit');
-        const btnCancel = document.getElementById('btn-cancel');
 
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
-            if (!currentUser) {
-                modal.classList.remove('hidden');
-                alert("Por favor, faça login para enviar uma avaliação.");
-                return;
-            }
+            if (!currentUser) return alert("Faça login primeiro.");
 
             const nome = document.getElementById('nome-cliente').value.trim();
             const mensagem = document.getElementById('mensagem-cliente').value.trim();
@@ -469,40 +548,41 @@
                         nome: nome,
                         mensagem: mensagem,
                         rating: selectedRating,
+                        foto: fotoBase64,
                         updatedAt: serverTimestamp()
                     });
-                    resetForm();
                 } else {
                     await addDoc(collection(db, "avaliacoes"), {
                         uid: currentUser.uid,
                         nome: nome,
                         mensagem: mensagem,
                         rating: selectedRating,
+                        foto: fotoBase64,
                         createdAt: serverTimestamp()
                     });
-                    resetForm();
                 }
+                resetCommentForm();
+                commentModal.classList.add('hidden');
             } catch (error) {
                 console.error("Erro ao salvar:", error);
-                alert("Ocorreu um erro ao salvar a avaliação.");
+                alert("Erro ao salvar a avaliação.");
             }
         });
 
-        btnCancel.addEventListener('click', resetForm);
-
-        function resetForm() {
+        function resetCommentForm() {
             form.reset();
             editIdInput.value = "";
             selectedRating = 5;
+            fotoBase64 = "";
+            previewFotoContainer.classList.add('hidden');
             updateStars(5);
             if(currentUser) {
                 document.getElementById('nome-cliente').value = currentUser.displayName || currentUser.email.split('@')[0];
             }
-            btnSubmit.textContent = "Publicar Comentário";
-            btnCancel.classList.add('hidden');
+            document.getElementById('comment-modal-title').textContent = "Deixar uma Avaliação";
+            document.getElementById('btn-submit').textContent = "Publicar Avaliação";
         }
 
-        // Função para gerar as iniciais do nome (ex: Cassia Ferreira -> CF)
         function getInitials(name) {
             if (!name) return "CL";
             const parts = name.trim().split(' ');
@@ -512,17 +592,23 @@
             return name.substring(0, 2).toUpperCase();
         }
 
-        // Carregar Avaliações em Tempo Real (Sem aspas no texto)
+        // Carregar Avaliações na Página e no Modal de Todos os Comentários
         function carregarAvaliacoes() {
             const q = query(collection(db, "avaliacoes"), orderBy("createdAt", "desc"));
             onSnapshot(q, (snapshot) => {
-                const container = document.getElementById('lista-avaliacoes');
+                const containerPrincipal = document.getElementById('lista-avaliacoes');
+                const containerModal = document.getElementById('lista-avaliacoes-modal');
+
                 if (snapshot.empty) {
-                    container.innerHTML = '<p class="text-center text-stone-400 text-sm col-span-3 py-8">Nenhuma avaliação enviada ainda. Seja a primeira!</p>';
+                    const noCommentsHtml = '<p class="text-center text-stone-400 text-sm col-span-3 py-8">Nenhuma avaliação enviada ainda. Seja a primeira!</p>';
+                    containerPrincipal.innerHTML = noCommentsHtml;
+                    containerModal.innerHTML = noCommentsHtml;
                     return;
                 }
 
-                container.innerHTML = '';
+                containerPrincipal.innerHTML = '';
+                containerModal.innerHTML = '';
+
                 snapshot.forEach((docSnapshot) => {
                     const data = docSnapshot.data();
                     const id = docSnapshot.id;
@@ -535,41 +621,55 @@
 
                     const initials = getInitials(data.nome);
 
-                    const card = document.createElement('div');
-                    card.className = "bg-white p-6 rounded-3xl border border-stone-100 shadow-sm hover:shadow-md transition flex flex-col justify-between space-y-6 relative";
-                    card.innerHTML = `
-                        <!-- Topo: Estrelas & Botões de Gerenciamento -->
-                        <div class="space-y-4">
-                            <div class="flex justify-between items-center">
-                                <div class="flex gap-1">${starsHtml}</div>
-                                ${isOwner ? `
-                                    <div class="flex gap-2 bg-stone-50 px-2 py-1 rounded-full border border-stone-200">
-                                        <button class="btn-edit text-stone-400 hover:text-brand-600 text-xs" data-id="${id}" data-nome="${escapeHtml(data.nome)}" data-mensagem="${escapeHtml(data.mensagem)}" data-rating="${data.rating}" title="Editar"><i class="fas fa-pen"></i></button>
-                                        <button class="btn-delete text-stone-400 hover:text-red-600 text-xs" data-id="${id}" title="Excluir"><i class="fas fa-trash"></i></button>
+                    // Template Exato Solicitado: Estrelas -> Comentário -> Foto -> Perfil
+                    const cardHtml = `
+                        <div class="bg-white p-6 rounded-3xl border border-stone-100 shadow-sm hover:shadow-md transition flex flex-col justify-between space-y-4 relative">
+                            <div class="space-y-3">
+                                <!-- Topo: Estrelas -->
+                                <div class="flex justify-between items-center">
+                                    <div class="flex gap-1">${starsHtml}</div>
+                                    ${isOwner ? `
+                                        <div class="flex gap-2 bg-stone-50 px-2 py-1 rounded-full border border-stone-200">
+                                            <button class="btn-edit text-stone-400 hover:text-brand-600 text-xs" data-id="${id}" data-nome="${escapeHtml(data.nome)}" data-mensagem="${escapeHtml(data.mensagem)}" data-rating="${data.rating}" data-foto="${data.foto || ''}" title="Editar"><i class="fas fa-pen"></i></button>
+                                            <button class="btn-delete text-stone-400 hover:text-red-600 text-xs" data-id="${id}" title="Excluir"><i class="fas fa-trash"></i></button>
+                                        </div>
+                                    ` : ''}
+                                </div>
+                                
+                                <!-- Comentário -->
+                                <p class="text-slate-600 italic text-sm leading-relaxed font-light">
+                                    ${escapeHtml(data.mensagem)}
+                                </p>
+
+                                <!-- Foto Opcional da Unha da Galeria -->
+                                ${data.foto ? `
+                                    <div class="pt-2">
+                                        <img src="${data.foto}" alt="Foto Unhas" class="w-full h-48 object-cover rounded-2xl border border-stone-100 shadow-inner">
                                     </div>
                                 ` : ''}
                             </div>
-                            
-                            <!-- Meio: Texto do Comentário em Itálico (Sem Aspas) -->
-                            <p class="text-slate-600 italic text-sm leading-relaxed font-light">
-                                ${escapeHtml(data.mensagem)}
-                            </p>
-                        </div>
 
-                        <!-- Rodapé do Card: Avatar em Círculo + Nome + Subtítulo -->
-                        <div class="pt-4 border-t border-stone-100/80 flex items-center gap-3">
-                            <div class="w-10 h-10 rounded-full bg-brand-100 text-brand-700 font-bold text-xs flex items-center justify-center shrink-0">
-                                ${initials}
-                            </div>
-                            <div class="overflow-hidden">
-                                <h4 class="font-bold text-sm text-slate-800 truncate">${escapeHtml(data.nome)}</h4>
-                                <p class="text-xs text-stone-400 font-normal">Cliente frequente</p>
+                            <!-- Perfil do Cliente -->
+                            <div class="pt-4 border-t border-stone-100/80 flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-full bg-brand-100 text-brand-700 font-bold text-xs flex items-center justify-center shrink-0">
+                                    ${initials}
+                                </div>
+                                <div class="overflow-hidden">
+                                    <h4 class="font-bold text-sm text-slate-800 truncate">${escapeHtml(data.nome)}</h4>
+                                    <p class="text-xs text-stone-400 font-normal">Cliente frequente</p>
+                                </div>
                             </div>
                         </div>
                     `;
-                    container.appendChild(card);
+
+                    // Inserir na grade da página principal
+                    containerPrincipal.innerHTML += cardHtml;
+
+                    // Inserir no modal "Ver todos os comentários"
+                    containerModal.innerHTML += cardHtml;
                 });
 
+                // Registrar eventos de excluir e editar em ambos os containers
                 document.querySelectorAll('.btn-delete').forEach(btn => {
                     btn.addEventListener('click', async (e) => {
                         const id = e.currentTarget.getAttribute('data-id');
@@ -586,10 +686,21 @@
                         document.getElementById('nome-cliente').value = target.getAttribute('data-nome');
                         document.getElementById('mensagem-cliente').value = target.getAttribute('data-mensagem');
                         selectedRating = parseInt(target.getAttribute('data-rating'));
+                        fotoBase64 = target.getAttribute('data-foto') || "";
+
+                        if (fotoBase64) {
+                            previewFoto.src = fotoBase64;
+                            previewFotoContainer.classList.remove('hidden');
+                        } else {
+                            previewFotoContainer.classList.add('hidden');
+                        }
+
                         updateStars(selectedRating);
-                        btnSubmit.textContent = "Atualizar Comentário";
-                        btnCancel.classList.remove('hidden');
-                        window.location.hash = "#avaliacoes";
+                        document.getElementById('comment-modal-title').textContent = "Editar Avaliação";
+                        document.getElementById('btn-submit').textContent = "Atualizar Avaliação";
+                        
+                        allCommentsModal.classList.add('hidden');
+                        commentModal.classList.remove('hidden');
                     });
                 });
             });
