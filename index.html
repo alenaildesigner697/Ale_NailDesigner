@@ -39,9 +39,20 @@
             cursor: pointer;
             transition: color 0.2s ease;
         }
+        /* Animação suave para o pop-up de notificação */
+        @keyframes slideIn {
+            from { transform: translateY(100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        .toast-animate {
+            animation: slideIn 0.3s ease-out forwards;
+        }
     </style>
 </head>
 <body class="bg-stone-50 font-sans text-stone-800 antialiased selection:bg-brand-200 selection:text-brand-900">
+
+    <!-- Sistema de Notificações Pop-up Interno (Toast) -->
+    <div id="toast-container" class="fixed bottom-6 right-6 z-50 flex flex-col gap-2 pointer-events-none"></div>
 
     <!-- Header / Navbar -->
     <header class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-stone-100 shadow-sm">
@@ -56,7 +67,7 @@
                 <a href="#avaliacoes" class="hover:text-brand-600 transition">Avaliações</a>
             </nav>
             <div class="flex items-center gap-3">
-                <!-- Botão Admin (Visível apenas para ale.naildesigner697@gmail.com) -->
+                <!-- Botão Admin -->
                 <button id="btn-open-admin" class="hidden text-xs font-medium bg-brand-600 hover:bg-brand-700 text-white px-3.5 py-2 rounded-full transition items-center gap-2 shadow-sm">
                     <i class="fas fa-chart-line"></i> Dashboard Admin
                 </button>
@@ -118,11 +129,11 @@
         </div>
     </div>
 
-    <!-- Modal DASHBOARD ADMINISTRATIVO ORGANIZADO (Alê) -->
+    <!-- Modal Dashboard Administrativo (Alê) -->
     <div id="admin-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-3 sm:p-6">
         <div class="bg-white rounded-3xl max-w-5xl w-full max-h-[92vh] shadow-2xl relative flex flex-col md:flex-row overflow-hidden border border-stone-100">
             
-            <!-- Sidebar / Menu Lateral do Dashboard -->
+            <!-- Sidebar / Menu Lateral -->
             <div class="w-full md:w-64 bg-stone-900 text-stone-300 p-6 flex flex-col justify-between shrink-0 space-y-6">
                 <div class="space-y-6">
                     <div class="flex items-center justify-between">
@@ -138,7 +149,7 @@
                         <button id="btn-close-admin-mobile" class="md:hidden text-stone-400 hover:text-white"><i class="fas fa-times text-lg"></i></button>
                     </div>
 
-                    <!-- Abas de Navegação -->
+                    <!-- Abas -->
                     <nav class="space-y-1.5 text-xs font-medium">
                         <button id="tab-btn-overview" class="tab-btn active w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition bg-stone-800 text-white">
                             <i class="fas fa-chart-pie text-brand-500 w-4"></i> Visão Geral
@@ -159,7 +170,7 @@
                 </div>
             </div>
 
-            <!-- Conteúdo Principal do Dashboard -->
+            <!-- Conteúdo do Dashboard -->
             <div class="flex-grow p-6 overflow-y-auto bg-stone-50 space-y-6">
                 
                 <!-- ABA 1: VISÃO GERAL -->
@@ -169,40 +180,30 @@
                         <p class="text-xs text-stone-500">Resumo em tempo real do seu site e portfólio</p>
                     </div>
 
-                    <!-- Cards de Estatísticas -->
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                         <div class="bg-white p-4 rounded-2xl border border-stone-200/80 shadow-sm flex items-center justify-between">
                             <div>
                                 <p class="text-xs text-stone-400 font-medium">Fotos na Galeria</p>
                                 <h4 class="text-2xl font-bold text-stone-900" id="stat-gallery-count">0</h4>
                             </div>
-                            <div class="w-10 h-10 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center text-lg">
-                                <i class="fas fa-image"></i>
-                            </div>
+                            <div class="w-10 h-10 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center text-lg"><i class="fas fa-image"></i></div>
                         </div>
-
                         <div class="bg-white p-4 rounded-2xl border border-stone-200/80 shadow-sm flex items-center justify-between">
                             <div>
                                 <p class="text-xs text-stone-400 font-medium">Serviços / Produtos</p>
                                 <h4 class="text-2xl font-bold text-stone-900" id="stat-services-count">0</h4>
                             </div>
-                            <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-lg">
-                                <i class="fas fa-tags"></i>
-                            </div>
+                            <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-lg"><i class="fas fa-tags"></i></div>
                         </div>
-
                         <div class="bg-white p-4 rounded-2xl border border-stone-200/80 shadow-sm flex items-center justify-between">
                             <div>
                                 <p class="text-xs text-stone-400 font-medium">Avaliações Recebidas</p>
                                 <h4 class="text-2xl font-bold text-stone-900" id="stat-reviews-count">0</h4>
                             </div>
-                            <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-lg">
-                                <i class="fas fa-star"></i>
-                            </div>
+                            <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-lg"><i class="fas fa-star"></i></div>
                         </div>
                     </div>
 
-                    <!-- Bloco de Ação Rápida -->
                     <div class="bg-white p-5 rounded-2xl border border-stone-200/80 shadow-sm space-y-3">
                         <h4 class="font-bold text-sm text-stone-900">Ações Rápidas</h4>
                         <div class="flex flex-wrap gap-3">
@@ -216,14 +217,13 @@
                     </div>
                 </div>
 
-                <!-- ABA 2: GERENCIAR GALERIA DE FOTOS -->
+                <!-- ABA 2: GERENCIAR GALERIA -->
                 <div id="tab-content-gallery" class="tab-content hidden space-y-6">
                     <div>
                         <h3 class="font-serif text-2xl font-bold text-stone-900">Galeria de Trabalhos</h3>
                         <p class="text-xs text-stone-500">Adicione novas fotos ou exclua trabalhos antigos da galeria pública</p>
                     </div>
 
-                    <!-- Formulário de Adicionar Foto -->
                     <div class="bg-white p-5 rounded-2xl border border-stone-200/80 shadow-sm space-y-4">
                         <h4 class="font-bold text-sm text-stone-800 flex items-center gap-2"><i class="fas fa-upload text-brand-600"></i> Publicar Nova Foto na Galeria</h4>
                         <form id="form-add-gallery" class="space-y-3">
@@ -243,23 +243,19 @@
                         </form>
                     </div>
 
-                    <!-- Lista de Fotos com Exclusão -->
                     <div class="space-y-3">
                         <h4 class="font-bold text-xs text-stone-500 uppercase tracking-wider">Fotos Publicadas na Galeria</h4>
-                        <div id="admin-gallery-grid" class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                            <!-- Carregado via JS -->
-                        </div>
+                        <div id="admin-gallery-grid" class="grid grid-cols-2 sm:grid-cols-4 gap-3"></div>
                     </div>
                 </div>
 
-                <!-- ABA 3: GERENCIAR SERVIÇOS E PRODUTOS -->
+                <!-- ABA 3: GERENCIAR SERVIÇOS -->
                 <div id="tab-content-services" class="tab-content hidden space-y-6">
                     <div>
                         <h3 class="font-serif text-2xl font-bold text-stone-900">Serviços & Produtos</h3>
                         <p class="text-xs text-stone-500">Adicione ou remova procedimentos e preços visíveis para suas clientes</p>
                     </div>
 
-                    <!-- Formulário de Adicionar Serviço/Produto -->
                     <div class="bg-white p-5 rounded-2xl border border-stone-200/80 shadow-sm space-y-4">
                         <h4 class="font-bold text-sm text-stone-800 flex items-center gap-2"><i class="fas fa-plus-circle text-brand-600"></i> Cadastrar Novo Serviço / Produto</h4>
                         <form id="form-add-service" class="space-y-3">
@@ -287,12 +283,9 @@
                         </form>
                     </div>
 
-                    <!-- Lista de Serviços Personalizados Cadastrados -->
                     <div class="space-y-3">
                         <h4 class="font-bold text-xs text-stone-500 uppercase tracking-wider">Serviços Cadastrados via Painel</h4>
-                        <div id="admin-services-list" class="space-y-2">
-                            <!-- Carregado via JS -->
-                        </div>
+                        <div id="admin-services-list" class="space-y-2"></div>
                     </div>
                 </div>
 
@@ -304,15 +297,12 @@
     <div id="comment-modal" class="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm hidden flex items-center justify-center p-4">
         <div class="bg-white rounded-2xl max-w-lg w-full p-6 space-y-5 shadow-2xl relative">
             <button id="btn-close-comment-modal" class="absolute top-4 right-4 text-stone-400 hover:text-stone-600 text-lg"><i class="fas fa-times"></i></button>
-            
             <div class="text-center space-y-1 border-b border-stone-100 pb-3">
                 <h3 class="font-serif text-2xl font-bold text-stone-900" id="comment-modal-title">Deixar uma Avaliação</h3>
                 <p class="text-stone-500 text-xs">Partilhe a sua experiência no salão da Alê</p>
             </div>
-
             <form id="form-avaliacao" class="space-y-4">
                 <input type="hidden" id="edit-id" value="">
-                
                 <div>
                     <label class="block text-xs font-medium text-stone-600 mb-1">A sua Classificação</label>
                     <div class="star-rating flex gap-2 text-amber-400 text-2xl" id="star-container">
@@ -323,18 +313,14 @@
                         <i class="far fa-star" data-rating="5"></i>
                     </div>
                 </div>
-
                 <div>
                     <label class="block text-xs font-medium text-stone-600 mb-1">O seu Nome</label>
                     <input type="text" id="nome-cliente" required placeholder="Digite o seu nome" class="w-full px-3 py-2 text-sm rounded-lg border border-stone-300 focus:outline-none focus:border-brand-500 bg-white">
                 </div>
-
                 <div>
                     <label class="block text-xs font-medium text-stone-600 mb-1">O seu Comentário</label>
                     <textarea id="mensagem-cliente" rows="3" required placeholder="Escreva sobre as suas unhas, atendimento, durabilidade..." class="w-full px-3 py-2 text-sm rounded-lg border border-stone-300 focus:outline-none focus:border-brand-500 bg-white resize-none"></textarea>
                 </div>
-
-                <!-- Upload de Foto Opcional -->
                 <div>
                     <label class="block text-xs font-medium text-stone-600 mb-1">Foto da sua unha (Opcional)</label>
                     <input type="file" id="foto-unha" accept="image/*" class="w-full text-xs text-stone-500 file:mr-3 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-brand-50 file:text-brand-700 hover:file:bg-brand-100 cursor-pointer">
@@ -342,10 +328,7 @@
                         <img id="preview-foto" src="" alt="Pré-visualização" class="h-20 w-20 object-cover rounded-xl border border-stone-200">
                     </div>
                 </div>
-
-                <button type="submit" id="btn-submit" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-medium py-3 rounded-xl text-sm transition shadow-sm">
-                    Publicar Avaliação
-                </button>
+                <button type="submit" id="btn-submit" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-medium py-3 rounded-xl text-sm transition shadow-sm">Publicar Avaliação</button>
             </form>
         </div>
     </div>
@@ -360,11 +343,7 @@
                 </div>
                 <button id="btn-close-all-comments" class="text-stone-400 hover:text-stone-600 text-xl w-8 h-8 rounded-full bg-stone-100 flex items-center justify-center"><i class="fas fa-times"></i></button>
             </div>
-
-            <!-- Lista com Scroll -->
-            <div id="lista-avaliacoes-modal" class="overflow-y-auto space-y-4 pr-2 flex-grow max-h-[60vh]">
-                <!-- Renderização dinâmica -->
-            </div>
+            <div id="lista-avaliacoes-modal" class="overflow-y-auto space-y-4 pr-2 flex-grow max-h-[60vh]"></div>
         </div>
     </div>
 
@@ -372,12 +351,8 @@
     <section class="py-20 px-4 bg-gradient-to-b from-brand-50/60 to-transparent">
         <div class="max-w-4xl mx-auto text-center space-y-6">
             <span class="text-brand-600 font-semibold tracking-wider text-xs uppercase px-3 py-1 bg-brand-100 rounded-full inline-block">Atendimento Exclusivo & Profissional</span>
-            <h1 class="font-serif text-4xl sm:text-6xl font-bold text-stone-900 leading-tight">
-                Unhas impecáveis que elevam a sua autoestima.
-            </h1>
-            <p class="text-stone-600 text-lg max-w-2xl mx-auto font-light">
-               Trabalho com técnicas modernas de alongamento, blindagem e nail art personalizada para garantir beleza, durabilidade e sofisticação às suas mãos em Caeté-MG.
-            </p>
+            <h1 class="font-serif text-4xl sm:text-6xl font-bold text-stone-900 leading-tight">Unhas impecáveis que elevam a sua autoestima.</h1>
+            <p class="text-stone-600 text-lg max-w-2xl mx-auto font-light">Trabalho com técnicas modernas de alongamento, blindagem e nail art personalizada para garantir beleza, durabilidade e sofisticação às suas mãos em Caeté-MG.</p>
             <div class="pt-4">
                 <a href="https://wa.me/5531992212015?text=Ol%C3%A1%20gostaria%20de%20agenda%20minhas%20unhas%2C%20quais%20horarios%20possui%20disponiveis%3F" target="_blank" class="inline-flex items-center gap-3 bg-stone-900 text-white px-8 py-4 rounded-full font-medium hover:bg-brand-600 transition shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 duration-200">
                     <i class="fab fa-whatsapp text-xl text-green-400"></i> Agendar pelo WhatsApp
@@ -389,7 +364,6 @@
     <!-- Seção Sobre Mim -->
     <section id="sobre" class="py-16 px-4 bg-white">
         <div class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-10 items-center">
-            <!-- Moldura de Imagem -->
             <div class="md:col-span-5 flex justify-center">
                 <div class="relative p-2 bg-gradient-to-tr from-brand-500 to-rose-300 rounded-3xl shadow-xl">
                     <div class="bg-white p-2 rounded-[22px]">
@@ -397,13 +371,10 @@
                     </div>
                 </div>
             </div>
-            <!-- Texto Sobre Mim -->
             <div class="md:col-span-7 space-y-4">
                 <span class="text-brand-600 font-semibold text-sm uppercase tracking-widest">Sobre Mim</span>
                 <h2 class="font-serif text-3xl font-bold text-stone-900">Olá, eu sou a Alê!</h2>
-                <p class="text-stone-600 leading-relaxed text-base">
-                    Sou apaixonada por transformar unhas e elevar a auto-estima das minhas clientes através do cuidado e da arte. Com anos de experiência em nail design, busco sempre a excelência em cada detalhe, utilizando produtos de altíssima qualidade e esterilização rigorosa para a sua total segurança.
-                </p>
+                <p class="text-stone-600 leading-relaxed text-base">Sou apaixonada por transformar unhas e elevar a auto-estima das minhas clientes através do cuidado e da arte. Com anos de experiência em nail design, busco sempre a excelência em cada detalhe, utilizando produtos de altíssima qualidade e esterilização rigorosa para a sua total segurança.</p>
                 <div class="pt-2 flex flex-wrap gap-4 text-xs font-semibold text-stone-700">
                     <span class="bg-stone-100 px-3 py-1.5 rounded-lg flex items-center gap-2"><i class="fas fa-check text-brand-600"></i> Biossegurança</span>
                     <span class="bg-stone-100 px-3 py-1.5 rounded-lg flex items-center gap-2"><i class="fas fa-check text-brand-600"></i> Gel de Alta Resistência</span>
@@ -616,6 +587,26 @@
         let fotoBase64 = "";
         let galleryBase64 = "";
 
+        // Função para mostrar Pop-up de Notificação Interno (Toast)
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            
+            const bgColor = type === 'success' ? 'bg-stone-900 text-white' : 'bg-red-600 text-white';
+            const icon = type === 'success' ? 'fa-check-circle text-emerald-400' : 'fa-exclamation-circle text-white';
+
+            toast.className = `pointer-events-auto flex items-center gap-3 px-4 py-3 rounded-2xl shadow-xl text-xs font-medium toast-animate ${bgColor} border border-stone-700`;
+            toast.innerHTML = `<i class="fas ${icon} text-base"></i><span>${message}</span>`;
+            
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transition = 'opacity 0.3s ease';
+                setTimeout(() => toast.remove(), 300);
+            }, 3500);
+        }
+
         // Modais
         const loginModal = document.getElementById('login-modal');
         const commentModal = document.getElementById('comment-modal');
@@ -633,7 +624,7 @@
         document.getElementById('btn-open-comment-modal').addEventListener('click', () => {
             if (!currentUser) {
                 loginModal.classList.remove('hidden');
-                alert("Por favor, faça login para publicar uma avaliação.");
+                showToast("Por favor, faça login para publicar uma avaliação.", "error");
                 return;
             }
             commentModal.classList.remove('hidden');
@@ -688,9 +679,10 @@
             try {
                 await signInWithPopup(auth, googleProvider);
                 loginModal.classList.add('hidden');
+                showToast("Sessão iniciada com sucesso!");
             } catch (error) {
                 console.error("Erro no login com Google:", error);
-                alert("Erro ao autenticar com o Google.");
+                showToast("Erro ao autenticar com o Google.", "error");
             }
         });
 
@@ -703,16 +695,21 @@
             try {
                 if (isSignUpMode) {
                     await createUserWithEmailAndPassword(auth, email, password);
+                    showToast("Conta criada com sucesso!");
                 } else {
                     await signInWithEmailAndPassword(auth, email, password);
+                    showToast("Sessão iniciada com sucesso!");
                 }
                 loginModal.classList.add('hidden');
             } catch (error) {
-                alert("Erro: " + error.message);
+                showToast("Erro: " + error.message, "error");
             }
         });
 
-        document.getElementById('btn-logout').addEventListener('click', () => signOut(auth));
+        document.getElementById('btn-logout').addEventListener('click', () => {
+            signOut(auth);
+            showToast("Sessão terminada.");
+        });
 
         // Monitor Auth & Permissão Admin
         onAuthStateChanged(auth, (user) => {
@@ -827,9 +824,9 @@
         // Enviar Foto para a Galeria via Firestore
         document.getElementById('form-add-gallery').addEventListener('submit', async (e) => {
             e.preventDefault();
-            if (!currentUser || currentUser.email.toLowerCase() !== ADMIN_EMAIL.toLowerCase()) return alert("Acesso restrito à administração.");
+            if (!currentUser || currentUser.email.toLowerCase() !== ADMIN_EMAIL.toLowerCase()) return showToast("Acesso restrito à administração.", "error");
             const titulo = document.getElementById('gallery-title').value.trim();
-            if (!galleryBase64) return alert("Por favor, selecione uma foto.");
+            if (!galleryBase64) return showToast("Por favor, selecione uma foto.", "error");
 
             try {
                 await addDoc(collection(db, "galeria"), {
@@ -837,19 +834,19 @@
                     imagem: galleryBase64,
                     createdAt: serverTimestamp()
                 });
-                alert("Foto publicada com sucesso na galeria!");
+                showToast("Foto publicada com sucesso na galeria!");
                 document.getElementById('form-add-gallery').reset();
                 galleryBase64 = "";
             } catch (error) {
                 console.error("Erro:", error);
-                alert("Erro ao publicar a foto.");
+                showToast("Erro ao publicar a foto.", "error");
             }
         });
 
         // Enviar Novo Serviço via Firestore
         document.getElementById('form-add-service').addEventListener('submit', async (e) => {
             e.preventDefault();
-            if (!currentUser || currentUser.email.toLowerCase() !== ADMIN_EMAIL.toLowerCase()) return alert("Acesso restrito à administração.");
+            if (!currentUser || currentUser.email.toLowerCase() !== ADMIN_EMAIL.toLowerCase()) return showToast("Acesso restrito à administração.", "error");
             
             const titulo = document.getElementById('service-title').value.trim();
             const preco = document.getElementById('service-price').value.trim();
@@ -864,15 +861,15 @@
                     descricao: desc,
                     createdAt: serverTimestamp()
                 });
-                alert("Novo serviço cadastrado com sucesso!");
+                showToast("Novo serviço cadastrado com sucesso!");
                 document.getElementById('form-add-service').reset();
             } catch (error) {
                 console.error("Erro:", error);
-                alert("Erro ao guardar o serviço.");
+                showToast("Erro ao guardar o serviço.", "error");
             }
         });
 
-        // Carregar Galeria Dinâmica do Firestore
+        // Carregar Galeria Dinâmica
         function carregarGaleriaDinamica() {
             const q = query(collection(db, "galeria"), orderBy("createdAt", "desc"));
             onSnapshot(q, (snapshot) => {
@@ -880,7 +877,7 @@
                 const adminGrid = document.getElementById('admin-gallery-grid');
                 const statCount = document.getElementById('stat-gallery-count');
 
-                if (statCount) statCount.textContent = snapshot.size + 4; // 4 fotos locais + dinâmicas
+                if (statCount) statCount.textContent = snapshot.size + 4;
 
                 container.innerHTML = '';
                 if (adminGrid) adminGrid.innerHTML = '';
@@ -922,13 +919,14 @@
                         const id = e.currentTarget.getAttribute('data-id');
                         if (confirm('Deseja excluir esta foto da galeria?')) {
                             await deleteDoc(doc(db, "galeria", id));
+                            showToast("Foto excluída da galeria.");
                         }
                     });
                 });
             });
         }
 
-        // Carregar Serviços Dinâmicos do Firestore
+        // Carregar Serviços Dinâmicos
         function carregarServicosDinamicos() {
             const q = query(collection(db, "servicos"), orderBy("createdAt", "desc"));
             onSnapshot(q, (snapshot) => {
@@ -937,7 +935,7 @@
                 const statCount = document.getElementById('stat-services-count');
                 const isAd = currentUser && currentUser.email.toLowerCase() === ADMIN_EMAIL.toLowerCase();
 
-                if (statCount) statCount.textContent = snapshot.size + 6; // 6 estáticos + dinâmicos
+                if (statCount) statCount.textContent = snapshot.size + 6;
 
                 container.innerHTML = '';
                 if (adminList) adminList.innerHTML = '';
@@ -985,6 +983,7 @@
                         const id = e.currentTarget.getAttribute('data-id');
                         if (confirm('Deseja excluir este serviço?')) {
                             await deleteDoc(doc(db, "servicos", id));
+                            showToast("Serviço excluído com sucesso.");
                         }
                     });
                 });
@@ -1019,7 +1018,7 @@
 
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
-            if (!currentUser) return alert("Faça login primeiro.");
+            if (!currentUser) return showToast("Faça login primeiro.", "error");
 
             const nome = document.getElementById('nome-cliente').value.trim();
             const mensagem = document.getElementById('mensagem-cliente').value.trim();
@@ -1036,6 +1035,7 @@
                         foto: fotoBase64,
                         updatedAt: serverTimestamp()
                     });
+                    showToast("Avaliação atualizada com sucesso!");
                 } else {
                     await addDoc(collection(db, "avaliacoes"), {
                         uid: currentUser.uid,
@@ -1045,12 +1045,13 @@
                         foto: fotoBase64,
                         createdAt: serverTimestamp()
                     });
+                    showToast("Avaliação publicada com sucesso!");
                 }
                 resetCommentForm();
                 commentModal.classList.add('hidden');
             } catch (error) {
                 console.error("Erro ao salvar:", error);
-                alert("Erro ao salvar a avaliação.");
+                showToast("Erro ao salvar a avaliação.", "error");
             }
         });
 
@@ -1158,6 +1159,7 @@
                         const id = e.currentTarget.getAttribute('data-id');
                         if (confirm('Deseja realmente excluir a sua avaliação?')) {
                             await deleteDoc(doc(db, "avaliacoes", id));
+                            showToast("Avaliação excluída com sucesso.");
                         }
                     });
                 });
