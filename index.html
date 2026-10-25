@@ -146,7 +146,7 @@
                     <textarea id="mensagem-cliente" rows="3" required placeholder="Escreva sobre suas unhas, atendimento, durabilidade..." class="w-full px-3 py-2 text-sm rounded-lg border border-stone-300 focus:outline-none focus:border-brand-500 bg-white resize-none"></textarea>
                 </div>
 
-                <!-- Upload de Foto Opcional da Galeria -->
+                <!-- Upload de Foto Opcional da Galeria (Comprimida automaticamente) -->
                 <div>
                     <label class="block text-xs font-medium text-stone-600 mb-1">Foto da sua unha (Opcional)</label>
                     <input type="file" id="foto-unha" accept="image/*" class="w-full text-xs text-stone-500 file:mr-3 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-brand-50 file:text-brand-700 hover:file:bg-brand-100 cursor-pointer">
@@ -481,7 +481,7 @@
             carregarAvaliacoes();
         });
 
-        // Preview de Foto da Galeria
+        // Compressor automático de imagem para evitar erro de tamanho no Firestore
         const inputFoto = document.getElementById('foto-unha');
         const previewFotoContainer = document.getElementById('preview-foto-container');
         const previewFoto = document.getElementById('preview-foto');
@@ -491,9 +491,36 @@
             if (file) {
                 const reader = new FileReader();
                 reader.onload = (event) => {
-                    fotoBase64 = event.target.result;
-                    previewFoto.src = fotoBase64;
-                    previewFotoContainer.classList.remove('hidden');
+                    const img = new Image();
+                    img.src = event.target.result;
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        const MAX_WIDTH = 800;
+                        const MAX_HEIGHT = 800;
+                        let width = img.width;
+                        let height = img.height;
+
+                        if (width > height) {
+                            if (width > MAX_WIDTH) {
+                                height *= MAX_WIDTH / width;
+                                width = MAX_WIDTH;
+                            }
+                        } else {
+                            if (height > MAX_HEIGHT) {
+                                width *= MAX_HEIGHT / height;
+                                height = MAX_HEIGHT;
+                            }
+                        }
+
+                        canvas.width = width;
+                        canvas.height = height;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, width, height);
+
+                        fotoBase64 = canvas.toDataURL('image/jpeg', 0.7); // Comprime em JPEG com 70% de qualidade
+                        previewFoto.src = fotoBase64;
+                        previewFotoContainer.classList.remove('hidden');
+                    };
                 };
                 reader.readAsDataURL(file);
             } else {
@@ -524,7 +551,7 @@
             });
         });
 
-        // Form Comment Submit (Fecha o modal automaticamente após o envio)
+        // Form Comment Submit
         const form = document.getElementById('form-avaliacao');
         const editIdInput = document.getElementById('edit-id');
 
@@ -558,10 +585,10 @@
                     });
                 }
                 resetCommentForm();
-                commentModal.classList.add('hidden'); // <-- Fecha o menu automaticamente aqui!
+                commentModal.classList.add('hidden');
             } catch (error) {
                 console.error("Erro ao salvar:", error);
-                alert("Erro ao salvar a avaliação.");
+                alert("Erro ao salvar a avaliação. A imagem pode ser muito pesada.");
             }
         });
 
@@ -654,11 +681,9 @@
                         </div>
                     `;
 
-                    // Mostra apenas os 3 primeiros na página principal (Área Vermelha)
                     if (count < 3) {
                         containerPrincipal.innerHTML += cardHtml;
                     }
-                    // Mostra todos no modal "Ver todos os comentários"
                     containerModal.innerHTML += cardHtml;
                     count++;
                 });
