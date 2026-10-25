@@ -56,6 +56,11 @@
                 <a href="#avaliacoes" class="hover:text-brand-600 transition">Avaliações</a>
             </nav>
             <div class="flex items-center gap-3">
+                <!-- Botão Admin (Visível apenas para ale.naildesigner697@gmail.com) -->
+                <button id="btn-open-admin" class="hidden text-xs font-medium bg-brand-50 hover:bg-brand-100 text-brand-700 px-3 py-2 rounded-full transition items-center gap-2 border border-brand-200">
+                    <i class="fas fa-sliders text-brand-600"></i> Painel Admin
+                </button>
+
                 <!-- Área de Perfil / Login -->
                 <div id="auth-header-container">
                     <button id="btn-open-login" class="text-xs font-medium bg-stone-100 hover:bg-stone-200 text-stone-700 px-4 py-2 rounded-full transition flex items-center gap-2">
@@ -109,6 +114,71 @@
 
             <div class="text-center pt-2">
                 <button type="button" id="toggle-auth-mode" class="text-xs text-brand-600 hover:underline font-medium">Não tem uma conta? Registe-se</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Painel Administrador (Alê) -->
+    <div id="admin-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-2xl w-full max-h-[90vh] p-6 space-y-6 shadow-2xl relative flex flex-col">
+            <div class="flex justify-between items-center border-b border-stone-100 pb-4">
+                <div>
+                    <h3 class="font-serif text-2xl font-bold text-stone-900">Painel de Controlo da Alê</h3>
+                    <p class="text-stone-500 text-xs">Adicione fotos à galeria e gerencie os seus serviços online</p>
+                </div>
+                <button id="btn-close-admin" class="text-stone-400 hover:text-stone-600 text-xl w-8 h-8 rounded-full bg-stone-100 flex items-center justify-center"><i class="fas fa-times"></i></button>
+            </div>
+
+            <div class="overflow-y-auto space-y-6 pr-1 flex-grow">
+                <!-- 1. Adicionar Foto à Galeria -->
+                <div class="bg-stone-50 p-4 rounded-2xl border border-stone-200 space-y-3">
+                    <h4 class="font-bold text-sm text-stone-800 flex items-center gap-2"><i class="fas fa-images text-brand-600"></i> Adicionar Foto à Galeria (Arquivos)</h4>
+                    <form id="form-add-gallery" class="space-y-3">
+                        <div>
+                            <label class="block text-xs font-medium text-stone-600 mb-1">Título / Legenda da Unha</label>
+                            <input type="text" id="gallery-title" required placeholder="Ex: Alongamento Almond & Glitter" class="w-full px-3 py-2 text-sm rounded-lg border border-stone-300 bg-white">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-stone-600 mb-1">Escolher Foto do Dispositivo</label>
+                            <input type="file" id="gallery-file" accept="image/*" required class="w-full text-xs text-stone-500 file:mr-3 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-brand-50 file:text-brand-700 hover:file:bg-brand-100 cursor-pointer">
+                        </div>
+                        <button type="submit" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-medium py-2.5 rounded-xl text-sm transition">Publicar na Galeria</button>
+                    </form>
+                </div>
+
+                <!-- 2. Adicionar/Ajustar Serviços -->
+                <div class="bg-stone-50 p-4 rounded-2xl border border-stone-200 space-y-3">
+                    <h4 class="font-bold text-sm text-stone-800 flex items-center gap-2"><i class="fas fa-tags text-brand-600"></i> Adicionar / Ajustar Serviço & Preço</h4>
+                    <form id="form-add-service" class="space-y-3">
+                        <div>
+                            <label class="block text-xs font-medium text-stone-600 mb-1">Nome do Procedimento</label>
+                            <input type="text" id="service-title" required placeholder="Ex: Banho de Gel Especial" class="w-full px-3 py-2 text-sm rounded-lg border border-stone-300 bg-white">
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <label class="block text-xs font-medium text-stone-600 mb-1">Preço (Ex: R$ 120,00)</label>
+                                <input type="text" id="service-price" required placeholder="R$ 120,00" class="w-full px-3 py-2 text-sm rounded-lg border border-stone-300 bg-white">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-stone-600 mb-1">Ícone (FontAwesome)</label>
+                                <input type="text" id="service-icon" required value="fas fa-sparkles" class="w-full px-3 py-2 text-sm rounded-lg border border-stone-300 bg-white">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-stone-600 mb-1">Descrição</label>
+                            <textarea id="service-desc" rows="2" required placeholder="Detalhes do procedimento..." class="w-full px-3 py-2 text-sm rounded-lg border border-stone-300 bg-white resize-none"></textarea>
+                        </div>
+                        <button type="submit" class="w-full bg-stone-900 hover:bg-stone-800 text-white font-medium py-2.5 rounded-xl text-sm transition">Salvar Serviço</button>
+                    </form>
+                </div>
+
+                <!-- Lista de Serviços Personalizados Cadastrados -->
+                <div class="space-y-2">
+                    <h4 class="font-bold text-xs text-stone-500 uppercase tracking-wider">Serviços Adicionados via Painel</h4>
+                    <div id="admin-services-list" class="space-y-2">
+                        <!-- Carregado via JS -->
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -234,8 +304,8 @@
                 <h2 class="font-serif text-3xl font-bold text-stone-900">Catálogo de Serviços</h2>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <!-- 1. Alongamento em Gel -->
+            <div id="lista-servicos-container" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Serviços padrão mantidos estáticos -->
                 <div class="bg-white p-6 rounded-2xl shadow-sm border border-stone-100 space-y-4 hover:shadow-md transition">
                     <div class="w-10 h-10 bg-brand-50 text-brand-600 rounded-xl flex items-center justify-center text-lg"><i class="fas fa-hand-sparkles"></i></div>
                     <h3 class="font-bold text-lg text-stone-900">Alongamento em Gel</h3>
@@ -246,7 +316,6 @@
                     </div>
                 </div>
 
-                <!-- 2. Blindagem de Unhas -->
                 <div class="bg-white p-6 rounded-2xl shadow-sm border border-stone-100 space-y-4 hover:shadow-md transition">
                     <div class="w-10 h-10 bg-brand-50 text-brand-600 rounded-xl flex items-center justify-center text-lg"><i class="fas fa-shield-halved"></i></div>
                     <h3 class="font-bold text-lg text-stone-900">Blindagem de Unhas</h3>
@@ -257,7 +326,6 @@
                     </div>
                 </div>
 
-                <!-- 3. Manicure & Pedicure -->
                 <div class="bg-white p-6 rounded-2xl shadow-sm border border-stone-100 space-y-4 hover:shadow-md transition">
                     <div class="w-10 h-10 bg-brand-50 text-brand-600 rounded-xl flex items-center justify-center text-lg"><i class="fas fa-paint-brush"></i></div>
                     <h3 class="font-bold text-lg text-stone-900">Manicure & Pedicure</h3>
@@ -268,7 +336,6 @@
                     </div>
                 </div>
 
-                <!-- 4. Manutenção de Gel -->
                 <div class="bg-white p-6 rounded-2xl shadow-sm border border-stone-100 space-y-4 hover:shadow-md transition">
                     <div class="w-10 h-10 bg-brand-50 text-brand-600 rounded-xl flex items-center justify-center text-lg"><i class="fas fa-rotate-right"></i></div>
                     <h3 class="font-bold text-lg text-stone-900">Manutenção de Gel</h3>
@@ -279,7 +346,6 @@
                     </div>
                 </div>
 
-                <!-- 5. Banho de Gel -->
                 <div class="bg-white p-6 rounded-2xl shadow-sm border border-stone-100 space-y-4 hover:shadow-md transition">
                     <div class="w-10 h-10 bg-brand-50 text-brand-600 rounded-xl flex items-center justify-center text-lg"><i class="fas fa-spa"></i></div>
                     <h3 class="font-bold text-lg text-stone-900">Banho de Gel</h3>
@@ -290,7 +356,6 @@
                     </div>
                 </div>
 
-                <!-- 6. Esmaltação em Gel -->
                 <div class="bg-white p-6 rounded-2xl shadow-sm border border-stone-100 space-y-4 hover:shadow-md transition">
                     <div class="w-10 h-10 bg-brand-50 text-brand-600 rounded-xl flex items-center justify-center text-lg"><i class="fas fa-gem"></i></div>
                     <h3 class="font-bold text-lg text-stone-900">Esmaltação em Gel</h3>
@@ -300,6 +365,9 @@
                         <span class="font-bold text-brand-700 text-lg">R$ 70,00</span>
                     </div>
                 </div>
+
+                <!-- Novos serviços adicionados online aparecerão aqui -->
+                <div id="lista-servicos-dinamicos" class="contents"></div>
             </div>
         </div>
     </section>
@@ -313,35 +381,38 @@
                 <p class="text-stone-500 text-sm max-w-lg mx-auto">Inspire-se com alguns dos nossos designs exclusivos e acabamentos em gel.</p>
             </div>
 
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
-                <!-- Foto 1 -->
+            <div id="lista-galeria-container" class="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
+                <!-- Foto 1 estática -->
                 <div class="group relative overflow-hidden rounded-2xl shadow-sm border border-stone-100 aspect-square">
                     <img src="img/magnetica.jpg" alt="Nail Art 1" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
                     <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex items-end p-4">
                         <span class="text-white text-xs font-medium">Unha Magnética</span>
                     </div>
                 </div>
-                <!-- Foto 2 -->
+                <!-- Foto 2 estática -->
                 <div class="group relative overflow-hidden rounded-2xl shadow-sm border border-stone-100 aspect-square">
                     <img src="img/manutencao_de_gel.jpg" alt="Nail Art 2" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
                     <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex items-end p-4">
                         <span class="text-white text-xs font-medium">Manutenção de Gel (30 dias)</span>
                     </div>
                 </div>
-                <!-- Foto 3 -->
+                <!-- Foto 3 estática -->
                 <div class="group relative overflow-hidden rounded-2xl shadow-sm border border-stone-100 aspect-square">
                     <img src="img/manutencao_de_gel1.jpg" alt="Nail Art 3" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
                     <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex items-end p-4">
                         <span class="text-white text-xs font-medium">Manutenção de Gel (20 dias)</span>
                     </div>
                 </div>
-                <!-- Foto 4 -->
+                <!-- Foto 4 estática -->
                 <div class="group relative overflow-hidden rounded-2xl shadow-sm border border-stone-100 aspect-square">
                     <img src="img/tradicional.jpg" alt="Nail Art 4" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
                     <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex items-end p-4">
                         <span class="text-white text-xs font-medium">Unhas Tradicionais</span>
                     </div>
                 </div>
+
+                <!-- Novas fotos adicionadas via painel aparecerão aqui -->
+                <div id="lista-galeria-dinamica" class="contents"></div>
             </div>
         </div>
     </section>
@@ -421,18 +492,24 @@
         const auth = getAuth(app);
         const googleProvider = new GoogleAuthProvider();
 
+        const ADMIN_EMAIL = "ale.naildesigner697@gmail.com";
         let currentUser = null;
         let selectedRating = 5;
         let isSignUpMode = false;
         let fotoBase64 = "";
+        let galleryBase64 = "";
 
         // Modais
         const loginModal = document.getElementById('login-modal');
         const commentModal = document.getElementById('comment-modal');
         const allCommentsModal = document.getElementById('all-comments-modal');
+        const adminModal = document.getElementById('admin-modal');
 
         document.getElementById('btn-open-login').addEventListener('click', () => loginModal.classList.remove('hidden'));
         document.getElementById('btn-close-modal').addEventListener('click', () => loginModal.classList.add('hidden'));
+
+        document.getElementById('btn-open-admin').addEventListener('click', () => adminModal.classList.remove('hidden'));
+        document.getElementById('btn-close-admin').addEventListener('click', () => adminModal.classList.add('hidden'));
 
         document.getElementById('btn-open-comment-modal').addEventListener('click', () => {
             if (!currentUser) {
@@ -444,7 +521,6 @@
         });
 
         document.getElementById('btn-close-comment-modal').addEventListener('click', () => commentModal.classList.add('hidden'));
-
         document.getElementById('btn-open-all-comments').addEventListener('click', () => allCommentsModal.classList.remove('hidden'));
         document.getElementById('btn-close-all-comments').addEventListener('click', () => allCommentsModal.classList.add('hidden'));
 
@@ -497,13 +573,14 @@
 
         document.getElementById('btn-logout').addEventListener('click', () => signOut(auth));
 
-        // Monitor Auth
+        // Monitor Auth & Permissão de Admin
         onAuthStateChanged(auth, (user) => {
             currentUser = user;
             const btnOpenLogin = document.getElementById('btn-open-login');
             const userLoggedInfo = document.getElementById('user-logged-info');
             const userDisplayName = document.getElementById('user-display-name');
             const nomeInput = document.getElementById('nome-cliente');
+            const btnOpenAdmin = document.getElementById('btn-open-admin');
 
             if (user) {
                 btnOpenLogin.classList.add('hidden');
@@ -514,17 +591,30 @@
                 userDisplayName.textContent = nameOrEmail;
                 nomeInput.value = nameOrEmail;
                 nomeInput.readOnly = true;
+
+                // Ativar o botão Admin se for o e-mail da Alê
+                if (user.email && user.email.toLowerCase() === ADMIN_EMAIL.toLowerCase()) {
+                    btnOpenAdmin.classList.remove('hidden');
+                    btnOpenAdmin.classList.add('flex');
+                } else {
+                    btnOpenAdmin.classList.add('hidden');
+                    btnOpenAdmin.classList.remove('flex');
+                }
             } else {
                 btnOpenLogin.classList.remove('hidden');
                 userLoggedInfo.classList.add('hidden');
                 userLoggedInfo.classList.remove('flex');
+                btnOpenAdmin.classList.add('hidden');
+                btnOpenAdmin.classList.remove('flex');
                 nomeInput.value = '';
                 nomeInput.readOnly = false;
             }
             carregarAvaliacoes();
+            carregarGaleriaDinamica();
+            carregarServicosDinamicos();
         });
 
-        // Compressor de imagem
+        // Compressor de foto para Avaliações
         const inputFoto = document.getElementById('foto-unha');
         const previewFotoContainer = document.getElementById('preview-foto-container');
         const previewFoto = document.getElementById('preview-foto');
@@ -542,24 +632,15 @@
                         const MAX_HEIGHT = 800;
                         let width = img.width;
                         let height = img.height;
-
                         if (width > height) {
-                            if (width > MAX_WIDTH) {
-                                height *= MAX_WIDTH / width;
-                                width = MAX_WIDTH;
-                            }
+                            if (width > MAX_WIDTH) { height *= MAX_WIDTH / width; width = MAX_WIDTH; }
                         } else {
-                            if (height > MAX_HEIGHT) {
-                                width *= MAX_HEIGHT / height;
-                                height = MAX_HEIGHT;
-                            }
+                            if (height > MAX_HEIGHT) { width *= MAX_HEIGHT / height; height = MAX_HEIGHT; }
                         }
-
                         canvas.width = width;
                         canvas.height = height;
                         const ctx = canvas.getContext('2d');
                         ctx.drawImage(img, 0, 0, width, height);
-
                         fotoBase64 = canvas.toDataURL('image/jpeg', 0.7);
                         previewFoto.src = fotoBase64;
                         previewFotoContainer.classList.remove('hidden');
@@ -571,6 +652,169 @@
                 previewFotoContainer.classList.add('hidden');
             }
         });
+
+        // Compressor de imagem da Galeria (Painel Admin)
+        const inputGalleryFile = document.getElementById('gallery-file');
+        inputGalleryFile.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    const img = new Image();
+                    img.src = event.target.result;
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        const MAX_WIDTH = 900;
+                        const MAX_HEIGHT = 900;
+                        let width = img.width;
+                        let height = img.height;
+                        if (width > height) {
+                            if (width > MAX_WIDTH) { height *= MAX_WIDTH / width; width = MAX_WIDTH; }
+                        } else {
+                            if (height > MAX_HEIGHT) { width *= MAX_HEIGHT / height; height = MAX_HEIGHT; }
+                        }
+                        canvas.width = width;
+                        canvas.height = height;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, width, height);
+                        galleryBase64 = canvas.toDataURL('image/jpeg', 0.75);
+                    };
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Enviar Foto para a Galeria via Firestore
+        document.getElementById('form-add-gallery').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            if (!currentUser || currentUser.email.toLowerCase() !== ADMIN_EMAIL.toLowerCase()) return alert("Acesso restrito à administração.");
+            const titulo = document.getElementById('gallery-title').value.trim();
+            if (!galleryBase64) return alert("Por favor, selecione uma foto.");
+
+            try {
+                await addDoc(collection(db, "galeria"), {
+                    titulo: titulo,
+                    imagem: galleryBase64,
+                    createdAt: serverTimestamp()
+                });
+                alert("Foto publicada com sucesso na galeria!");
+                document.getElementById('form-add-gallery').reset();
+                galleryBase64 = "";
+                adminModal.classList.add('hidden');
+            } catch (error) {
+                console.error("Erro:", error);
+                alert("Erro ao publicar a foto.");
+            }
+        });
+
+        // Enviar Novo Serviço via Firestore
+        document.getElementById('form-add-service').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            if (!currentUser || currentUser.email.toLowerCase() !== ADMIN_EMAIL.toLowerCase()) return alert("Acesso restrito à administração.");
+            
+            const titulo = document.getElementById('service-title').value.trim();
+            const preco = document.getElementById('service-price').value.trim();
+            const icone = document.getElementById('service-icon').value.trim();
+            const desc = document.getElementById('service-desc').value.trim();
+
+            try {
+                await addDoc(collection(db, "servicos"), {
+                    titulo: titulo,
+                    preco: preco,
+                    icone: icone,
+                    descricao: desc,
+                    createdAt: serverTimestamp()
+                });
+                alert("Novo serviço adicionado com sucesso!");
+                document.getElementById('form-add-service').reset();
+                adminModal.classList.add('hidden');
+            } catch (error) {
+                console.error("Erro:", error);
+                alert("Erro ao guardar o serviço.");
+            }
+        });
+
+        // Carregar Galeria Dinâmica do Firestore
+        function carregarGaleriaDinamica() {
+            const q = query(collection(db, "galeria"), orderBy("createdAt", "desc"));
+            onSnapshot(q, (snapshot) => {
+                const container = document.getElementById('lista-galeria-dinamica');
+                container.innerHTML = '';
+
+                snapshot.forEach((docSnap) => {
+                    const data = docSnap.data();
+                    const id = docSnap.id;
+                    const isAd = currentUser && currentUser.email.toLowerCase() === ADMIN_EMAIL.toLowerCase();
+
+                    container.innerHTML += `
+                        <div class="group relative overflow-hidden rounded-2xl shadow-sm border border-stone-100 aspect-square">
+                            <img src="${data.imagem}" alt="${escapeHtml(data.titulo)}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex flex-col justify-between p-3">
+                                ${isAd ? `<button class="btn-del-gallery self-end bg-red-600 text-white w-7 h-7 rounded-full text-xs shadow-md hover:bg-red-700" data-id="${id}" title="Excluir da Galeria"><i class="fas fa-trash"></i></button>` : '<span></span>'}
+                                <span class="text-white text-xs font-medium">${escapeHtml(data.titulo)}</span>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                document.querySelectorAll('.btn-del-gallery').forEach(btn => {
+                    btn.addEventListener('click', async (e) => {
+                        const id = e.currentTarget.getAttribute('data-id');
+                        if (confirm('Deseja excluir esta foto da galeria?')) {
+                            await deleteDoc(doc(db, "galeria", id));
+                        }
+                    });
+                });
+            });
+        }
+
+        // Carregar Serviços Dinâmicos do Firestore
+        function carregarServicosDinamicos() {
+            const q = query(collection(db, "servicos"), orderBy("createdAt", "desc"));
+            onSnapshot(q, (snapshot) => {
+                const container = document.getElementById('lista-servicos-dinamicos');
+                const adminList = document.getElementById('admin-services-list');
+                const isAd = currentUser && currentUser.email.toLowerCase() === ADMIN_EMAIL.toLowerCase();
+
+                container.innerHTML = '';
+                if (adminList) adminList.innerHTML = '';
+
+                snapshot.forEach((docSnap) => {
+                    const data = docSnap.data();
+                    const id = docSnap.id;
+
+                    container.innerHTML += `
+                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-stone-100 space-y-4 hover:shadow-md transition">
+                            <div class="w-10 h-10 bg-brand-50 text-brand-600 rounded-xl flex items-center justify-center text-lg"><i class="${escapeHtml(data.icone)}"></i></div>
+                            <h3 class="font-bold text-lg text-stone-900">${escapeHtml(data.titulo)}</h3>
+                            <p class="text-stone-500 text-sm leading-relaxed">${escapeHtml(data.descricao)}</p>
+                            <div class="pt-2 flex justify-between items-center border-t border-stone-100">
+                                <span class="text-xs text-stone-400">A partir de</span>
+                                <span class="font-bold text-brand-700 text-lg">${escapeHtml(data.preco)}</span>
+                            </div>
+                        </div>
+                    `;
+
+                    if (adminList && isAd) {
+                        adminList.innerHTML += `
+                            <div class="flex justify-between items-center bg-white p-2.5 rounded-xl border border-stone-200 text-xs">
+                                <span class="font-bold">${escapeHtml(data.titulo)} (${escapeHtml(data.preco)})</span>
+                                <button class="btn-del-service text-red-600 hover:text-red-800 font-medium px-2 py-1" data-id="${id}"><i class="fas fa-trash"></i> Excluir</button>
+                            </div>
+                        `;
+                    }
+                });
+
+                document.querySelectorAll('.btn-del-service').forEach(btn => {
+                    btn.addEventListener('click', async (e) => {
+                        const id = e.currentTarget.getAttribute('data-id');
+                        if (confirm('Deseja excluir este serviço?')) {
+                            await deleteDoc(doc(db, "servicos", id));
+                        }
+                    });
+                });
+            });
+        }
 
         // Estrelas
         const stars = document.querySelectorAll('#star-container i');
@@ -631,7 +875,7 @@
                 commentModal.classList.add('hidden');
             } catch (error) {
                 console.error("Erro ao salvar:", error);
-                alert("Erro ao salvar a avaliação. A imagem pode ser demasiado pesada.");
+                alert("Erro ao salvar a avaliação.");
             }
         });
 
@@ -679,7 +923,7 @@
                 snapshot.forEach((docSnapshot) => {
                     const data = docSnapshot.data();
                     const id = docSnapshot.id;
-                    const isOwner = currentUser && currentUser.uid === data.uid;
+                    const isOwner = currentUser && (currentUser.uid === data.uid || (currentUser.email && currentUser.email.toLowerCase() === ADMIN_EMAIL.toLowerCase()));
 
                     let starsHtml = '';
                     for (let i = 1; i <= 5; i++) {
