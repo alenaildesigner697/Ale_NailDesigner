@@ -39,7 +39,6 @@
             cursor: pointer;
             transition: color 0.2s ease;
         }
-        /* Animação suave para o pop-up de notificação */
         @keyframes slideIn {
             from { transform: translateY(100%); opacity: 0; }
             to { transform: translateY(0); opacity: 1; }
@@ -49,24 +48,27 @@
         }
     </style>
 </head>
-<body class="bg-stone-50 font-sans text-stone-800 antialiased selection:bg-brand-200 selection:text-brand-900">
+<body class="bg-stone-50 font-sans text-stone-800 antialiased selection:bg-brand-200 selection:text-brand-900 overflow-x-hidden">
 
     <!-- Sistema de Notificações Pop-up Interno (Toast) -->
-    <div id="toast-container" class="fixed bottom-6 right-6 z-50 flex flex-col gap-2 pointer-events-none"></div>
+    <div id="toast-container" class="fixed bottom-4 left-4 right-4 sm:left-auto sm:right-6 sm:bottom-6 z-[100] flex flex-col gap-2 pointer-events-none"></div>
 
     <!-- Header / Navbar -->
-    <header class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-stone-100 shadow-sm">
+    <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-stone-100 shadow-sm">
         <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
-            <a href="#" class="font-serif text-2xl font-bold tracking-tight text-brand-700">
+            <a href="#" class="font-serif text-xl sm:text-2xl font-bold tracking-tight text-brand-700">
                 Ale<span class="text-stone-700 font-normal">_Naildesigner</span>
             </a>
-            <nav class="hidden md:flex space-x-6 text-sm font-medium text-stone-600">
+
+            <!-- Navegação Desktop -->
+            <nav class="hidden lg:flex space-x-6 text-sm font-medium text-stone-600">
                 <a href="#sobre" class="hover:text-brand-600 transition">Sobre Mim</a>
                 <a href="#servicos" class="hover:text-brand-600 transition">Serviços</a>
                 <a href="#galeria" class="hover:text-brand-600 transition">Galeria</a>
                 <a href="#avaliacoes" class="hover:text-brand-600 transition">Avaliações</a>
             </nav>
-            <div class="flex items-center gap-3">
+
+            <div class="hidden sm:flex items-center gap-2 sm:gap-3">
                 <!-- Botão Admin -->
                 <button id="btn-open-admin" class="hidden text-xs font-medium bg-brand-600 hover:bg-brand-700 text-white px-3.5 py-2 rounded-full transition items-center gap-2 shadow-sm">
                     <i class="fas fa-chart-line"></i> Dashboard Admin
@@ -74,17 +76,52 @@
 
                 <!-- Área de Perfil / Login -->
                 <div id="auth-header-container">
-                    <button id="btn-open-login" class="text-xs font-medium bg-stone-100 hover:bg-stone-200 text-stone-700 px-4 py-2 rounded-full transition flex items-center gap-2">
-                        <i class="fas fa-user-circle text-brand-600 text-base"></i> Entrar / Conta
+                    <button id="btn-open-login" class="text-xs font-medium bg-stone-100 hover:bg-stone-200 text-stone-700 px-3.5 py-2 rounded-full transition flex items-center gap-1.5">
+                        <i class="fas fa-user-circle text-brand-600 text-base"></i> Entrar
                     </button>
                 </div>
                 <div id="user-logged-info" class="hidden items-center gap-2 bg-stone-100 px-3 py-1.5 rounded-full text-xs font-medium text-stone-700">
-                    <span id="user-display-name">Minha Conta</span>
+                    <span id="user-display-name" class="max-w-[100px] truncate">Minha Conta</span>
                     <button id="btn-logout" class="text-stone-400 hover:text-red-600 ml-1" title="Sair"><i class="fas fa-sign-out-alt"></i></button>
                 </div>
 
-                <a href="https://wa.me/5531992212015?text=Ol%C3%A1%20gostaria%20de%20agenda%20minhas%20unhas%2C%20quais%20horarios%20possui%20disponiveis%3F" target="_blank" class="bg-brand-600 text-white px-4 py-2 rounded-full text-xs sm:text-sm font-medium hover:bg-brand-700 transition shadow-sm flex items-center gap-2">
+                <a href="https://wa.me/5531992212015?text=Ol%C3%A1%20gostaria%20de%20agenda%20minhas%20unhas%2C%20quais%20horarios%20possui%20disponiveis%3F" target="_blank" class="bg-brand-600 text-white px-3.5 py-2 rounded-full text-xs sm:text-sm font-medium hover:bg-brand-700 transition shadow-sm flex items-center gap-2">
                     <i class="fab font-bold fa-whatsapp text-base"></i> Agendar
+                </a>
+            </div>
+
+            <!-- Botão Menu Hambúrguer Mobile -->
+            <button id="btn-toggle-menu" class="lg:hidden text-stone-700 text-xl p-2 rounded-lg hover:bg-stone-100 focus:outline-none">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+
+        <!-- Menu Desdobrável Mobile -->
+        <div id="mobile-menu" class="hidden lg:hidden bg-white border-b border-stone-200 px-4 pt-2 pb-4 space-y-3">
+            <nav class="flex flex-col space-y-2 text-sm font-medium text-stone-600">
+                <a href="#sobre" class="mobile-nav-link py-1.5 border-b border-stone-50 hover:text-brand-600">Sobre Mim</a>
+                <a href="#servicos" class="mobile-nav-link py-1.5 border-b border-stone-50 hover:text-brand-600">Serviços</a>
+                <a href="#galeria" class="mobile-nav-link py-1.5 border-b border-stone-50 hover:text-brand-600">Galeria</a>
+                <a href="#avaliacoes" class="mobile-nav-link py-1.5 border-b border-stone-50 hover:text-brand-600">Avaliações</a>
+            </nav>
+
+            <div class="pt-2 flex flex-col gap-2">
+                <button id="btn-open-admin-mobile" class="hidden w-full text-xs font-medium bg-brand-600 text-white py-2.5 rounded-xl justify-center items-center gap-2">
+                    <i class="fas fa-chart-line"></i> Dashboard Admin
+                </button>
+
+                <div id="auth-mobile-container" class="w-full">
+                    <button id="btn-open-login-mobile" class="w-full text-xs font-medium bg-stone-100 text-stone-700 py-2.5 rounded-xl flex justify-center items-center gap-2">
+                        <i class="fas fa-user-circle text-brand-600 text-base"></i> Entrar / Minha Conta
+                    </button>
+                </div>
+                <div id="user-logged-info-mobile" class="hidden justify-between items-center bg-stone-100 px-4 py-2.5 rounded-xl text-xs font-medium text-stone-700">
+                    <span id="user-display-name-mobile" class="truncate max-w-[180px]">Minha Conta</span>
+                    <button id="btn-logout-mobile" class="text-red-600 font-semibold flex items-center gap-1" title="Sair"><i class="fas fa-sign-out-alt"></i> Sair</button>
+                </div>
+
+                <a href="https://wa.me/5531992212015?text=Ol%C3%A1%20gostaria%20de%20agenda%20minhas%20unhas%2C%20quais%20horarios%20possui%20disponiveis%3F" target="_blank" class="w-full bg-brand-600 text-white py-2.5 rounded-xl text-xs font-medium text-center flex justify-center items-center gap-2">
+                    <i class="fab font-bold fa-whatsapp text-base"></i> Agendar pelo WhatsApp
                 </a>
             </div>
         </div>
@@ -92,26 +129,26 @@
 
     <!-- Modal de Login / Cadastro -->
     <div id="login-modal" class="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl max-w-md w-full p-6 space-y-6 shadow-2xl relative">
+        <div class="bg-white rounded-2xl max-w-md w-full p-5 sm:p-6 space-y-5 shadow-2xl relative">
             <button id="btn-close-modal" class="absolute top-4 right-4 text-stone-400 hover:text-stone-600 text-lg"><i class="fas fa-times"></i></button>
             <div class="text-center space-y-1">
-                <h3 class="font-serif text-2xl font-bold text-stone-900" id="modal-title">Aceder à sua Conta</h3>
+                <h3 class="font-serif text-xl sm:text-2xl font-bold text-stone-900" id="modal-title">Aceder à sua Conta</h3>
                 <p class="text-stone-500 text-xs">Entre para gerir as suas avaliações no salão</p>
             </div>
 
             <!-- Botão Google -->
-            <button id="btn-google-login" class="w-full border border-stone-300 hover:bg-stone-50 text-stone-700 font-medium py-2.5 rounded-xl text-sm transition flex items-center justify-center gap-3 shadow-sm">
+            <button id="btn-google-login" class="w-full border border-stone-300 hover:bg-stone-50 text-stone-700 font-medium py-2.5 rounded-xl text-xs sm:text-sm transition flex items-center justify-center gap-3 shadow-sm">
                 <i class="fab fa-google text-red-500"></i> Continuar com o Google
             </button>
 
-            <div class="flex items-center my-4">
+            <div class="flex items-center my-3">
                 <div class="flex-grow border-t border-stone-200"></div>
-                <span class="px-3 text-stone-400 text-xs uppercase">ou com e-mail</span>
+                <span class="px-3 text-stone-400 text-[10px] uppercase">ou com e-mail</span>
                 <div class="flex-grow border-t border-stone-200"></div>
             </div>
 
             <!-- Formulário E-mail e Senha -->
-            <form id="form-email-auth" class="space-y-4">
+            <form id="form-email-auth" class="space-y-3.5">
                 <div>
                     <label class="block text-xs font-medium text-stone-600 mb-1">E-mail</label>
                     <input type="email" id="auth-email" required placeholder="seu@email.com" class="w-full px-3 py-2 text-sm rounded-lg border border-stone-300 focus:outline-none focus:border-brand-500">
@@ -120,22 +157,22 @@
                     <label class="block text-xs font-medium text-stone-600 mb-1">Palavra-passe</label>
                     <input type="password" id="auth-password" required placeholder="••••••••" class="w-full px-3 py-2 text-sm rounded-lg border border-stone-300 focus:outline-none focus:border-brand-500">
                 </div>
-                <button type="submit" id="btn-submit-auth" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-medium py-2.5 rounded-xl text-sm transition">Entrar</button>
+                <button type="submit" id="btn-submit-auth" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-medium py-2.5 rounded-xl text-xs sm:text-sm transition">Entrar</button>
             </form>
 
-            <div class="text-center pt-2">
+            <div class="text-center pt-1">
                 <button type="button" id="toggle-auth-mode" class="text-xs text-brand-600 hover:underline font-medium">Não tem uma conta? Registe-se</button>
             </div>
         </div>
     </div>
 
     <!-- Modal Dashboard Administrativo (Alê) -->
-    <div id="admin-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-3 sm:p-6">
-        <div class="bg-white rounded-3xl max-w-5xl w-full max-h-[92vh] shadow-2xl relative flex flex-col md:flex-row overflow-hidden border border-stone-100">
+    <div id="admin-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-2 sm:p-6">
+        <div class="bg-white rounded-3xl max-w-5xl w-full max-h-[95vh] sm:max-h-[92vh] shadow-2xl relative flex flex-col md:flex-row overflow-hidden border border-stone-100">
             
             <!-- Sidebar / Menu Lateral -->
-            <div class="w-full md:w-64 bg-stone-900 text-stone-300 p-6 flex flex-col justify-between shrink-0 space-y-6">
-                <div class="space-y-6">
+            <div class="w-full md:w-64 bg-stone-900 text-stone-300 p-4 sm:p-6 flex flex-col justify-between shrink-0 space-y-4 md:space-y-6">
+                <div class="space-y-4 md:space-y-6">
                     <div class="flex items-center justify-between">
                         <div class="flex items-center gap-2">
                             <div class="w-8 h-8 rounded-xl bg-brand-600 flex items-center justify-center text-white font-bold text-sm">
@@ -143,27 +180,27 @@
                             </div>
                             <div>
                                 <h3 class="font-bold text-sm text-white leading-tight">Painel Admin</h3>
-                                <p class="text-[10px] text-stone-400 truncate max-w-[120px]">ale.naildesigner697@gmail.com</p>
+                                <p class="text-[10px] text-stone-400 truncate max-w-[130px]">ale.naildesigner697@gmail.com</p>
                             </div>
                         </div>
-                        <button id="btn-close-admin-mobile" class="md:hidden text-stone-400 hover:text-white"><i class="fas fa-times text-lg"></i></button>
+                        <button id="btn-close-admin-mobile" class="md:hidden text-stone-400 hover:text-white p-1"><i class="fas fa-times text-lg"></i></button>
                     </div>
 
                     <!-- Abas -->
-                    <nav class="space-y-1.5 text-xs font-medium">
-                        <button id="tab-btn-overview" class="tab-btn active w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition bg-stone-800 text-white">
+                    <nav class="flex md:flex-col gap-1.5 overflow-x-auto pb-1 md:pb-0 text-xs font-medium">
+                        <button id="tab-btn-overview" class="tab-btn active shrink-0 md:w-full flex items-center gap-2 sm:gap-3 px-3 py-2 sm:px-3.5 sm:py-2.5 rounded-xl transition bg-stone-800 text-white">
                             <i class="fas fa-chart-pie text-brand-500 w-4"></i> Visão Geral
                         </button>
-                        <button id="tab-btn-gallery" class="tab-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition text-stone-400 hover:bg-stone-800 hover:text-white">
+                        <button id="tab-btn-gallery" class="tab-btn shrink-0 md:w-full flex items-center gap-2 sm:gap-3 px-3 py-2 sm:px-3.5 sm:py-2.5 rounded-xl transition text-stone-400 hover:bg-stone-800 hover:text-white">
                             <i class="fas fa-images text-brand-500 w-4"></i> Galeria de Fotos
                         </button>
-                        <button id="tab-btn-services" class="tab-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition text-stone-400 hover:bg-stone-800 hover:text-white">
+                        <button id="tab-btn-services" class="tab-btn shrink-0 md:w-full flex items-center gap-2 sm:gap-3 px-3 py-2 sm:px-3.5 sm:py-2.5 rounded-xl transition text-stone-400 hover:bg-stone-800 hover:text-white">
                             <i class="fas fa-boxes-packing text-brand-500 w-4"></i> Serviços & Produtos
                         </button>
                     </nav>
                 </div>
 
-                <div class="pt-4 border-t border-stone-800">
+                <div class="hidden md:block pt-4 border-t border-stone-800">
                     <button id="btn-close-admin" class="w-full bg-stone-800 hover:bg-stone-700 text-stone-300 py-2 rounded-xl text-xs font-medium transition flex items-center justify-center gap-2">
                         <i class="fas fa-arrow-left"></i> Voltar ao Site
                     </button>
@@ -171,16 +208,16 @@
             </div>
 
             <!-- Conteúdo do Dashboard -->
-            <div class="flex-grow p-6 overflow-y-auto bg-stone-50 space-y-6">
+            <div class="flex-grow p-4 sm:p-6 overflow-y-auto bg-stone-50 space-y-6">
                 
                 <!-- ABA 1: VISÃO GERAL -->
                 <div id="tab-content-overview" class="tab-content space-y-6">
                     <div>
-                        <h3 class="font-serif text-2xl font-bold text-stone-900">Visão Geral do Salão</h3>
+                        <h3 class="font-serif text-xl sm:text-2xl font-bold text-stone-900">Visão Geral do Salão</h3>
                         <p class="text-xs text-stone-500">Resumo em tempo real do seu site e portfólio</p>
                     </div>
 
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
                         <div class="bg-white p-4 rounded-2xl border border-stone-200/80 shadow-sm flex items-center justify-between">
                             <div>
                                 <p class="text-xs text-stone-400 font-medium">Fotos na Galeria</p>
@@ -204,13 +241,13 @@
                         </div>
                     </div>
 
-                    <div class="bg-white p-5 rounded-2xl border border-stone-200/80 shadow-sm space-y-3">
+                    <div class="bg-white p-4 sm:p-5 rounded-2xl border border-stone-200/80 shadow-sm space-y-3">
                         <h4 class="font-bold text-sm text-stone-900">Ações Rápidas</h4>
-                        <div class="flex flex-wrap gap-3">
-                            <button onclick="switchTab('gallery')" class="bg-brand-50 hover:bg-brand-100 text-brand-700 text-xs font-semibold px-4 py-2.5 rounded-xl border border-brand-200 transition flex items-center gap-2">
+                        <div class="flex flex-col sm:flex-row gap-2.5">
+                            <button onclick="switchTab('gallery')" class="w-full sm:w-auto bg-brand-50 hover:bg-brand-100 text-brand-700 text-xs font-semibold px-4 py-2.5 rounded-xl border border-brand-200 transition flex items-center justify-center gap-2">
                                 <i class="fas fa-plus-circle"></i> Adicionar Foto à Galeria
                             </button>
-                            <button onclick="switchTab('services')" class="bg-stone-100 hover:bg-stone-200 text-stone-700 text-xs font-semibold px-4 py-2.5 rounded-xl transition flex items-center gap-2">
+                            <button onclick="switchTab('services')" class="w-full sm:w-auto bg-stone-100 hover:bg-stone-200 text-stone-700 text-xs font-semibold px-4 py-2.5 rounded-xl transition flex items-center justify-center gap-2">
                                 <i class="fas fa-plus"></i> Adicionar Novo Serviço
                             </button>
                         </div>
@@ -220,12 +257,12 @@
                 <!-- ABA 2: GERENCIAR GALERIA -->
                 <div id="tab-content-gallery" class="tab-content hidden space-y-6">
                     <div>
-                        <h3 class="font-serif text-2xl font-bold text-stone-900">Galeria de Trabalhos</h3>
+                        <h3 class="font-serif text-xl sm:text-2xl font-bold text-stone-900">Galeria de Trabalhos</h3>
                         <p class="text-xs text-stone-500">Adicione novas fotos ou exclua trabalhos antigos da galeria pública</p>
                     </div>
 
-                    <div class="bg-white p-5 rounded-2xl border border-stone-200/80 shadow-sm space-y-4">
-                        <h4 class="font-bold text-sm text-stone-800 flex items-center gap-2"><i class="fas fa-upload text-brand-600"></i> Publicar Nova Foto na Galeria</h4>
+                    <div class="bg-white p-4 sm:p-5 rounded-2xl border border-stone-200/80 shadow-sm space-y-4">
+                        <h4 class="font-bold text-sm text-stone-800 flex items-center gap-2"><i class="fas fa-upload text-brand-600"></i> Publicar Nova Foto</h4>
                         <form id="form-add-gallery" class="space-y-3">
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                 <div>
@@ -233,11 +270,11 @@
                                     <input type="text" id="gallery-title" required placeholder="Ex: Alongamento Almond com Nail Art" class="w-full px-3 py-2 text-sm rounded-lg border border-stone-300 focus:outline-none focus:border-brand-500">
                                 </div>
                                 <div>
-                                    <label class="block text-xs font-medium text-stone-600 mb-1">Escolher Foto dos Ficheiros</label>
-                                    <input type="file" id="gallery-file" accept="image/*" required class="w-full text-xs text-stone-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-brand-50 file:text-brand-700 hover:file:bg-brand-100 cursor-pointer">
+                                    <label class="block text-xs font-medium text-stone-600 mb-1">Escolher Foto</label>
+                                    <input type="file" id="gallery-file" accept="image/*" required class="w-full text-xs text-stone-500 file:mr-2 file:py-1.5 file:px-3 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-brand-50 file:text-brand-700 hover:file:bg-brand-100 cursor-pointer">
                                 </div>
                             </div>
-                            <button type="submit" class="bg-brand-600 hover:bg-brand-700 text-white font-medium px-5 py-2.5 rounded-xl text-xs transition shadow-sm flex items-center gap-2">
+                            <button type="submit" class="w-full sm:w-auto bg-brand-600 hover:bg-brand-700 text-white font-medium px-5 py-2.5 rounded-xl text-xs transition shadow-sm flex items-center justify-center gap-2">
                                 <i class="fas fa-cloud-arrow-up"></i> Publicar Foto
                             </button>
                         </form>
@@ -245,19 +282,19 @@
 
                     <div class="space-y-3">
                         <h4 class="font-bold text-xs text-stone-500 uppercase tracking-wider">Fotos Publicadas na Galeria</h4>
-                        <div id="admin-gallery-grid" class="grid grid-cols-2 sm:grid-cols-4 gap-3"></div>
+                        <div id="admin-gallery-grid" class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-3"></div>
                     </div>
                 </div>
 
                 <!-- ABA 3: GERENCIAR SERVIÇOS -->
                 <div id="tab-content-services" class="tab-content hidden space-y-6">
                     <div>
-                        <h3 class="font-serif text-2xl font-bold text-stone-900">Serviços & Produtos</h3>
+                        <h3 class="font-serif text-xl sm:text-2xl font-bold text-stone-900">Serviços & Produtos</h3>
                         <p class="text-xs text-stone-500">Adicione ou remova procedimentos e preços visíveis para suas clientes</p>
                     </div>
 
-                    <div class="bg-white p-5 rounded-2xl border border-stone-200/80 shadow-sm space-y-4">
-                        <h4 class="font-bold text-sm text-stone-800 flex items-center gap-2"><i class="fas fa-plus-circle text-brand-600"></i> Cadastrar Novo Serviço / Produto</h4>
+                    <div class="bg-white p-4 sm:p-5 rounded-2xl border border-stone-200/80 shadow-sm space-y-4">
+                        <h4 class="font-bold text-sm text-stone-800 flex items-center gap-2"><i class="fas fa-plus-circle text-brand-600"></i> Cadastrar Novo Serviço</h4>
                         <form id="form-add-service" class="space-y-3">
                             <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
                                 <div>
@@ -277,7 +314,7 @@
                                 <label class="block text-xs font-medium text-stone-600 mb-1">Descrição Curta</label>
                                 <textarea id="service-desc" rows="2" required placeholder="Explicação sucinta do procedimento..." class="w-full px-3 py-2 text-sm rounded-lg border border-stone-300 focus:outline-none focus:border-brand-500 resize-none"></textarea>
                             </div>
-                            <button type="submit" class="bg-stone-900 hover:bg-stone-800 text-white font-medium px-5 py-2.5 rounded-xl text-xs transition shadow-sm flex items-center gap-2">
+                            <button type="submit" class="w-full sm:w-auto bg-stone-900 hover:bg-stone-800 text-white font-medium px-5 py-2.5 rounded-xl text-xs transition shadow-sm flex items-center justify-center gap-2">
                                 <i class="fas fa-save"></i> Cadastrar Serviço
                             </button>
                         </form>
@@ -295,13 +332,13 @@
 
     <!-- Modal Adicionar / Editar Comentário -->
     <div id="comment-modal" class="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl max-w-lg w-full p-6 space-y-5 shadow-2xl relative">
+        <div class="bg-white rounded-2xl max-w-lg w-full p-5 sm:p-6 space-y-4 sm:space-y-5 shadow-2xl relative">
             <button id="btn-close-comment-modal" class="absolute top-4 right-4 text-stone-400 hover:text-stone-600 text-lg"><i class="fas fa-times"></i></button>
             <div class="text-center space-y-1 border-b border-stone-100 pb-3">
-                <h3 class="font-serif text-2xl font-bold text-stone-900" id="comment-modal-title">Deixar uma Avaliação</h3>
+                <h3 class="font-serif text-xl sm:text-2xl font-bold text-stone-900" id="comment-modal-title">Deixar uma Avaliação</h3>
                 <p class="text-stone-500 text-xs">Partilhe a sua experiência no salão da Alê</p>
             </div>
-            <form id="form-avaliacao" class="space-y-4">
+            <form id="form-avaliacao" class="space-y-3.5">
                 <input type="hidden" id="edit-id" value="">
                 <div>
                     <label class="block text-xs font-medium text-stone-600 mb-1">A sua Classificação</label>
@@ -323,59 +360,59 @@
                 </div>
                 <div>
                     <label class="block text-xs font-medium text-stone-600 mb-1">Foto da sua unha (Opcional)</label>
-                    <input type="file" id="foto-unha" accept="image/*" class="w-full text-xs text-stone-500 file:mr-3 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-brand-50 file:text-brand-700 hover:file:bg-brand-100 cursor-pointer">
+                    <input type="file" id="foto-unha" accept="image/*" class="w-full text-xs text-stone-500 file:mr-2 file:py-1.5 file:px-3 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-brand-50 file:text-brand-700 hover:file:bg-brand-100 cursor-pointer">
                     <div id="preview-foto-container" class="mt-2 hidden">
-                        <img id="preview-foto" src="" alt="Pré-visualização" class="h-20 w-20 object-cover rounded-xl border border-stone-200">
+                        <img id="preview-foto" src="" alt="Pré-visualização" class="h-16 w-16 object-cover rounded-xl border border-stone-200">
                     </div>
                 </div>
-                <button type="submit" id="btn-submit" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-medium py-3 rounded-xl text-sm transition shadow-sm">Publicar Avaliação</button>
+                <button type="submit" id="btn-submit" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-medium py-2.5 sm:py-3 rounded-xl text-xs sm:text-sm transition shadow-sm">Publicar Avaliação</button>
             </form>
         </div>
     </div>
 
     <!-- Modal "Ver Todos os Comentários" -->
-    <div id="all-comments-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4 sm:p-6">
-        <div class="bg-white rounded-3xl max-w-4xl w-full max-h-[85vh] p-6 space-y-6 shadow-2xl relative flex flex-col">
-            <div class="flex justify-between items-center border-b border-stone-100 pb-4">
+    <div id="all-comments-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-3 sm:p-6">
+        <div class="bg-white rounded-3xl max-w-4xl w-full max-h-[85vh] p-4 sm:p-6 space-y-4 sm:space-y-6 shadow-2xl relative flex flex-col">
+            <div class="flex justify-between items-center border-b border-stone-100 pb-3 sm:pb-4">
                 <div>
-                    <h3 class="font-serif text-2xl font-bold text-stone-900">Todas as Avaliações</h3>
+                    <h3 class="font-serif text-xl sm:text-2xl font-bold text-stone-900">Todas as Avaliações</h3>
                     <p class="text-stone-500 text-xs">O que as nossas clientes dizem sobre o Ale_Naildesigner</p>
                 </div>
-                <button id="btn-close-all-comments" class="text-stone-400 hover:text-stone-600 text-xl w-8 h-8 rounded-full bg-stone-100 flex items-center justify-center"><i class="fas fa-times"></i></button>
+                <button id="btn-close-all-comments" class="text-stone-400 hover:text-stone-600 text-lg w-8 h-8 rounded-full bg-stone-100 flex items-center justify-center"><i class="fas fa-times"></i></button>
             </div>
-            <div id="lista-avaliacoes-modal" class="overflow-y-auto space-y-4 pr-2 flex-grow max-h-[60vh]"></div>
+            <div id="lista-avaliacoes-modal" class="overflow-y-auto space-y-3 sm:space-y-4 pr-1 flex-grow max-h-[60vh]"></div>
         </div>
     </div>
 
     <!-- Banner Principal / Hero -->
-    <section class="py-20 px-4 bg-gradient-to-b from-brand-50/60 to-transparent">
-        <div class="max-w-4xl mx-auto text-center space-y-6">
-            <span class="text-brand-600 font-semibold tracking-wider text-xs uppercase px-3 py-1 bg-brand-100 rounded-full inline-block">Atendimento Exclusivo & Profissional</span>
-            <h1 class="font-serif text-4xl sm:text-6xl font-bold text-stone-900 leading-tight">Unhas impecáveis que elevam a sua autoestima.</h1>
-            <p class="text-stone-600 text-lg max-w-2xl mx-auto font-light">Trabalho com técnicas modernas de alongamento, blindagem e nail art personalizada para garantir beleza, durabilidade e sofisticação às suas mãos em Caeté-MG.</p>
-            <div class="pt-4">
-                <a href="https://wa.me/5531992212015?text=Ol%C3%A1%20gostaria%20de%20agenda%20minhas%20unhas%2C%20quais%20horarios%20possui%20disponiveis%3F" target="_blank" class="inline-flex items-center gap-3 bg-stone-900 text-white px-8 py-4 rounded-full font-medium hover:bg-brand-600 transition shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 duration-200">
-                    <i class="fab fa-whatsapp text-xl text-green-400"></i> Agendar pelo WhatsApp
+    <section class="py-12 sm:py-20 px-4 bg-gradient-to-b from-brand-50/60 to-transparent">
+        <div class="max-w-4xl mx-auto text-center space-y-4 sm:space-y-6">
+            <span class="text-brand-600 font-semibold tracking-wider text-[11px] sm:text-xs uppercase px-3 py-1 bg-brand-100 rounded-full inline-block">Atendimento Exclusivo & Profissional</span>
+            <h1 class="font-serif text-3xl sm:text-6xl font-bold text-stone-900 leading-tight">Unhas impecáveis que elevam a sua autoestima.</h1>
+            <p class="text-stone-600 text-sm sm:text-lg max-w-2xl mx-auto font-light">Trabalho com técnicas modernas de alongamento, blindagem e nail art personalizada para garantir beleza, durabilidade e sofisticação às suas mãos em Caeté-MG.</p>
+            <div class="pt-2 sm:pt-4">
+                <a href="https://wa.me/5531992212015?text=Ol%C3%A1%20gostaria%20de%20agenda%20minhas%20unhas%2C%20quais%20horarios%20possui%20disponiveis%3F" target="_blank" class="w-full sm:w-auto inline-flex items-center justify-center gap-3 bg-stone-900 text-white px-6 sm:px-8 py-3.5 sm:py-4 rounded-full text-sm font-medium hover:bg-brand-600 transition shadow-lg duration-200">
+                    <i class="fab fa-whatsapp text-lg sm:text-xl text-green-400"></i> Agendar pelo WhatsApp
                 </a>
             </div>
         </div>
     </section>
 
     <!-- Seção Sobre Mim -->
-    <section id="sobre" class="py-16 px-4 bg-white">
-        <div class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-10 items-center">
+    <section id="sobre" class="py-12 sm:py-16 px-4 bg-white">
+        <div class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-8 sm:gap-10 items-center">
             <div class="md:col-span-5 flex justify-center">
-                <div class="relative p-2 bg-gradient-to-tr from-brand-500 to-rose-300 rounded-3xl shadow-xl">
+                <div class="relative p-2 bg-gradient-to-tr from-brand-500 to-rose-300 rounded-3xl shadow-xl w-full max-w-xs sm:max-w-none">
                     <div class="bg-white p-2 rounded-[22px]">
-                        <img src="img/sobre_mim.jpg" alt="Ale Naildesigner" class="rounded-[18px] w-full h-80 object-cover shadow-inner">
+                        <img src="img/sobre_mim.jpg" alt="Ale Naildesigner" class="rounded-[18px] w-full h-72 sm:h-80 object-cover shadow-inner">
                     </div>
                 </div>
             </div>
-            <div class="md:col-span-7 space-y-4">
-                <span class="text-brand-600 font-semibold text-sm uppercase tracking-widest">Sobre Mim</span>
-                <h2 class="font-serif text-3xl font-bold text-stone-900">Olá, eu sou a Alê!</h2>
-                <p class="text-stone-600 leading-relaxed text-base">Sou apaixonada por transformar unhas e elevar a auto-estima das minhas clientes através do cuidado e da arte. Com anos de experiência em nail design, busco sempre a excelência em cada detalhe, utilizando produtos de altíssima qualidade e esterilização rigorosa para a sua total segurança.</p>
-                <div class="pt-2 flex flex-wrap gap-4 text-xs font-semibold text-stone-700">
+            <div class="md:col-span-7 space-y-3 sm:space-y-4 text-center md:text-left">
+                <span class="text-brand-600 font-semibold text-xs sm:text-sm uppercase tracking-widest">Sobre Mim</span>
+                <h2 class="font-serif text-2xl sm:text-3xl font-bold text-stone-900">Olá, eu sou a Alê!</h2>
+                <p class="text-stone-600 leading-relaxed text-sm sm:text-base">Sou apaixonada por transformar unhas e elevar a auto-estima das minhas clientes através do cuidado e da arte. Com anos de experiência em nail design, busco sempre a excelência em cada detalhe, utilizando produtos de altíssima qualidade e esterilização rigorosa para a sua total segurança.</p>
+                <div class="pt-2 flex flex-wrap justify-center md:justify-start gap-2.5 sm:gap-4 text-xs font-semibold text-stone-700">
                     <span class="bg-stone-100 px-3 py-1.5 rounded-lg flex items-center gap-2"><i class="fas fa-check text-brand-600"></i> Biossegurança</span>
                     <span class="bg-stone-100 px-3 py-1.5 rounded-lg flex items-center gap-2"><i class="fas fa-check text-brand-600"></i> Gel de Alta Resistência</span>
                     <span class="bg-stone-100 px-3 py-1.5 rounded-lg flex items-center gap-2"><i class="fas fa-check text-brand-600"></i> Caeté - MG</span>
@@ -385,72 +422,72 @@
     </section>
 
     <!-- Seção Serviços -->
-    <section id="servicos" class="py-16 px-4 bg-stone-50">
-        <div class="max-w-6xl mx-auto space-y-12">
+    <section id="servicos" class="py-12 sm:py-16 px-4 bg-stone-50">
+        <div class="max-w-6xl mx-auto space-y-8 sm:space-y-12">
             <div class="text-center space-y-2">
-                <span class="text-brand-600 font-semibold text-sm uppercase tracking-widest">Procedimentos</span>
-                <h2 class="font-serif text-3xl font-bold text-stone-900">Catálogo de Serviços</h2>
+                <span class="text-brand-600 font-semibold text-xs sm:text-sm uppercase tracking-widest">Procedimentos</span>
+                <h2 class="font-serif text-2xl sm:text-3xl font-bold text-stone-900">Catálogo de Serviços</h2>
             </div>
 
-            <div id="lista-servicos-container" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div id="lista-servicos-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
                 <!-- Serviços estáticos base -->
-                <div class="bg-white p-6 rounded-2xl shadow-sm border border-stone-100 space-y-4 hover:shadow-md transition">
+                <div class="bg-white p-5 sm:p-6 rounded-2xl shadow-sm border border-stone-100 space-y-3 sm:space-y-4 hover:shadow-md transition">
                     <div class="w-10 h-10 bg-brand-50 text-brand-600 rounded-xl flex items-center justify-center text-lg"><i class="fas fa-hand-sparkles"></i></div>
-                    <h3 class="font-bold text-lg text-stone-900">Alongamento em Gel</h3>
-                    <p class="text-stone-500 text-sm leading-relaxed">Alongamento estruturado com gel de alta resistência, acabamento natural e durabilidade incrível.</p>
+                    <h3 class="font-bold text-base sm:text-lg text-stone-900">Alongamento em Gel</h3>
+                    <p class="text-stone-500 text-xs sm:text-sm leading-relaxed">Alongamento estruturado com gel de alta resistência, acabamento natural e durabilidade incrível.</p>
                     <div class="pt-2 flex justify-between items-center border-t border-stone-100">
-                        <span class="text-xs text-stone-400">A partir de</span>
-                        <span class="font-bold text-brand-700 text-lg">R$ 140,00</span>
+                        <span class="text-[11px] text-stone-400">A partir de</span>
+                        <span class="font-bold text-brand-700 text-base sm:text-lg">R$ 140,00</span>
                     </div>
                 </div>
 
-                <div class="bg-white p-6 rounded-2xl shadow-sm border border-stone-100 space-y-4 hover:shadow-md transition">
+                <div class="bg-white p-5 sm:p-6 rounded-2xl shadow-sm border border-stone-100 space-y-3 sm:space-y-4 hover:shadow-md transition">
                     <div class="w-10 h-10 bg-brand-50 text-brand-600 rounded-xl flex items-center justify-center text-lg"><i class="fas fa-shield-halved"></i></div>
-                    <h3 class="font-bold text-lg text-stone-900">Blindagem de Unhas</h3>
-                    <p class="text-stone-500 text-sm leading-relaxed">Camada protetora sobre a unha natural para evitar quebras, permitindo que cresçam fortes e saudáveis.</p>
+                    <h3 class="font-bold text-base sm:text-lg text-stone-900">Blindagem de Unhas</h3>
+                    <p class="text-stone-500 text-xs sm:text-sm leading-relaxed">Camada protetora sobre a unha natural para evitar quebras, permitindo que cresçam fortes e saudáveis.</p>
                     <div class="pt-2 flex justify-between items-center border-t border-stone-100">
-                        <span class="text-xs text-stone-400">A partir de</span>
-                        <span class="font-bold text-brand-700 text-lg">R$ 70,00</span>
+                        <span class="text-[11px] text-stone-400">A partir de</span>
+                        <span class="font-bold text-brand-700 text-base sm:text-lg">R$ 70,00</span>
                     </div>
                 </div>
 
-                <div class="bg-white p-6 rounded-2xl shadow-sm border border-stone-100 space-y-4 hover:shadow-md transition">
+                <div class="bg-white p-5 sm:p-6 rounded-2xl shadow-sm border border-stone-100 space-y-3 sm:space-y-4 hover:shadow-md transition">
                     <div class="w-10 h-10 bg-brand-50 text-brand-600 rounded-xl flex items-center justify-center text-lg"><i class="fas fa-paint-brush"></i></div>
-                    <h3 class="font-bold text-lg text-stone-900">Manicure & Pedicure</h3>
-                    <p class="text-stone-500 text-sm leading-relaxed">Cutilagem impecável, preparação completa e esmaltação tradicional ou em gel com grande variedade de cores.</p>
+                    <h3 class="font-bold text-base sm:text-lg text-stone-900">Manicure & Pedicure</h3>
+                    <p class="text-stone-500 text-xs sm:text-sm leading-relaxed">Cutilagem impecável, preparação completa e esmaltação tradicional ou em gel com grande variedade de cores.</p>
                     <div class="pt-2 flex justify-between items-center border-t border-stone-100">
-                        <span class="text-xs text-stone-400">A partir de</span>
-                        <span class="font-bold text-brand-700 text-lg">R$ 60,00</span>
+                        <span class="text-[11px] text-stone-400">A partir de</span>
+                        <span class="font-bold text-brand-700 text-base sm:text-lg">R$ 60,00</span>
                     </div>
                 </div>
 
-                <div class="bg-white p-6 rounded-2xl shadow-sm border border-stone-100 space-y-4 hover:shadow-md transition">
+                <div class="bg-white p-5 sm:p-6 rounded-2xl shadow-sm border border-stone-100 space-y-3 sm:space-y-4 hover:shadow-md transition">
                     <div class="w-10 h-10 bg-brand-50 text-brand-600 rounded-xl flex items-center justify-center text-lg"><i class="fas fa-rotate-right"></i></div>
-                    <h3 class="font-bold text-lg text-stone-900">Manutenção de Gel</h3>
-                    <p class="text-stone-500 text-sm leading-relaxed">Manutenção periódica recomendada a cada 20 a 25 dias para garantir a segurança e beleza do seu alongamento.</p>
+                    <h3 class="font-bold text-base sm:text-lg text-stone-900">Manutenção de Gel</h3>
+                    <p class="text-stone-500 text-xs sm:text-sm leading-relaxed">Manutenção periódica recomendada a cada 20 a 25 dias para garantir a segurança e beleza do seu alongamento.</p>
                     <div class="pt-2 flex justify-between items-center border-t border-stone-100">
-                        <span class="text-xs text-stone-400">A partir de</span>
-                        <span class="font-bold text-brand-700 text-lg">R$ 110,00</span>
+                        <span class="text-[11px] text-stone-400">A partir de</span>
+                        <span class="font-bold text-brand-700 text-base sm:text-lg">R$ 110,00</span>
                     </div>
                 </div>
 
-                <div class="bg-white p-6 rounded-2xl shadow-sm border border-stone-100 space-y-4 hover:shadow-md transition">
+                <div class="bg-white p-5 sm:p-6 rounded-2xl shadow-sm border border-stone-100 space-y-3 sm:space-y-4 hover:shadow-md transition">
                     <div class="w-10 h-10 bg-brand-50 text-brand-600 rounded-xl flex items-center justify-center text-lg"><i class="fas fa-spa"></i></div>
-                    <h3 class="font-bold text-lg text-stone-900">Banho de Gel</h3>
-                    <p class="text-stone-500 text-sm leading-relaxed">Uma técnica ideal para fortalecer e proteger as unhas naturais, proporcionando mais resistência e um acabamento impecável.</p>
+                    <h3 class="font-bold text-base sm:text-lg text-stone-900">Banho de Gel</h3>
+                    <p class="text-stone-500 text-xs sm:text-sm leading-relaxed">Uma técnica ideal para fortalecer e proteger as unhas naturais, proporcionando mais resistência e um acabamento impecável.</p>
                     <div class="pt-2 flex justify-between items-center border-t border-stone-100">
-                        <span class="text-xs text-stone-400">A partir de</span>
-                        <span class="font-bold text-brand-700 text-lg">R$ 110,00</span>
+                        <span class="text-[11px] text-stone-400">A partir de</span>
+                        <span class="font-bold text-brand-700 text-base sm:text-lg">R$ 110,00</span>
                     </div>
                 </div>
 
-                <div class="bg-white p-6 rounded-2xl shadow-sm border border-stone-100 space-y-4 hover:shadow-md transition">
+                <div class="bg-white p-5 sm:p-6 rounded-2xl shadow-sm border border-stone-100 space-y-3 sm:space-y-4 hover:shadow-md transition">
                     <div class="w-10 h-10 bg-brand-50 text-brand-600 rounded-xl flex items-center justify-center text-lg"><i class="fas fa-gem"></i></div>
-                    <h3 class="font-bold text-lg text-stone-900">Esmaltação em Gel</h3>
-                    <p class="text-stone-500 text-sm leading-relaxed">Esmaltação com acabamento impecável e brilho intenso, ideal para quem busca unhas bonitas por muito mais tempo.</p>
+                    <h3 class="font-bold text-base sm:text-lg text-stone-900">Esmaltação em Gel</h3>
+                    <p class="text-stone-500 text-xs sm:text-sm leading-relaxed">Esmaltação com acabamento impecável e brilho intenso, ideal para quem busca unhas bonitas por muito mais tempo.</p>
                     <div class="pt-2 flex justify-between items-center border-t border-stone-100">
-                        <span class="text-xs text-stone-400">A partir de</span>
-                        <span class="font-bold text-brand-700 text-lg">R$ 70,00</span>
+                        <span class="text-[11px] text-stone-400">A partir de</span>
+                        <span class="font-bold text-brand-700 text-base sm:text-lg">R$ 70,00</span>
                     </div>
                 </div>
 
@@ -461,41 +498,41 @@
     </section>
 
     <!-- Galeria de Unhas / Trabalhos -->
-    <section id="galeria" class="py-16 px-4 bg-white">
-        <div class="max-w-6xl mx-auto space-y-10">
+    <section id="galeria" class="py-12 sm:py-16 px-4 bg-white">
+        <div class="max-w-6xl mx-auto space-y-8 sm:space-y-10">
             <div class="text-center space-y-2">
                 <span class="text-brand-600 font-semibold text-xs uppercase tracking-widest bg-brand-50 px-3 py-1 rounded-full">Portfólio</span>
-                <h2 class="font-serif text-3xl sm:text-4xl font-bold text-stone-900">Galeria de Trabalhos</h2>
-                <p class="text-stone-500 text-sm max-w-lg mx-auto">Inspire-se com alguns dos nossos designs exclusivos e acabamentos em gel.</p>
+                <h2 class="font-serif text-2xl sm:text-4xl font-bold text-stone-900">Galeria de Trabalhos</h2>
+                <p class="text-stone-500 text-xs sm:text-sm max-w-lg mx-auto">Inspire-se com alguns dos nossos designs exclusivos e acabamentos em gel.</p>
             </div>
 
-            <div id="lista-galeria-container" class="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
+            <div id="lista-galeria-container" class="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-6">
                 <!-- Foto 1 -->
                 <div class="group relative overflow-hidden rounded-2xl shadow-sm border border-stone-100 aspect-square">
                     <img src="img/magnetica.jpg" alt="Nail Art 1" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex items-end p-4">
-                        <span class="text-white text-xs font-medium">Unha Magnética</span>
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex items-end p-3 sm:p-4">
+                        <span class="text-white text-[11px] sm:text-xs font-medium">Unha Magnética</span>
                     </div>
                 </div>
                 <!-- Foto 2 -->
                 <div class="group relative overflow-hidden rounded-2xl shadow-sm border border-stone-100 aspect-square">
                     <img src="img/manutencao_de_gel.jpg" alt="Nail Art 2" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex items-end p-4">
-                        <span class="text-white text-xs font-medium">Manutenção de Gel (30 dias)</span>
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex items-end p-3 sm:p-4">
+                        <span class="text-white text-[11px] sm:text-xs font-medium">Manutenção de Gel (30 dias)</span>
                     </div>
                 </div>
                 <!-- Foto 3 -->
                 <div class="group relative overflow-hidden rounded-2xl shadow-sm border border-stone-100 aspect-square">
                     <img src="img/manutencao_de_gel1.jpg" alt="Nail Art 3" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex items-end p-4">
-                        <span class="text-white text-xs font-medium">Manutenção de Gel (20 dias)</span>
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex items-end p-3 sm:p-4">
+                        <span class="text-white text-[11px] sm:text-xs font-medium">Manutenção de Gel (20 dias)</span>
                     </div>
                 </div>
                 <!-- Foto 4 -->
                 <div class="group relative overflow-hidden rounded-2xl shadow-sm border border-stone-100 aspect-square">
                     <img src="img/tradicional.jpg" alt="Nail Art 4" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex items-end p-4">
-                        <span class="text-white text-xs font-medium">Unhas Tradicionais</span>
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex items-end p-3 sm:p-4">
+                        <span class="text-white text-[11px] sm:text-xs font-medium">Unhas Tradicionais</span>
                     </div>
                 </div>
 
@@ -506,55 +543,55 @@
     </section>
 
     <!-- Seção Avaliações -->
-    <section id="avaliacoes" class="py-16 px-4 bg-brand-50/30">
-        <div class="max-w-6xl mx-auto space-y-8">
+    <section id="avaliacoes" class="py-12 sm:py-16 px-4 bg-brand-50/30">
+        <div class="max-w-6xl mx-auto space-y-6 sm:space-y-8">
             <div class="text-center space-y-2">
                 <span class="text-brand-600 font-semibold text-xs uppercase tracking-widest bg-brand-100/70 px-3 py-1 rounded-full">Depoimentos</span>
-                <h2 class="font-serif text-3xl sm:text-4xl font-bold text-slate-800">O que dizem as nossas clientes</h2>
+                <h2 class="font-serif text-2xl sm:text-4xl font-bold text-slate-800">O que dizem as nossas clientes</h2>
             </div>
 
-            <div class="flex flex-col sm:flex-row justify-center items-center gap-4 py-2">
-                <button id="btn-open-comment-modal" class="bg-brand-600 hover:bg-brand-700 text-white font-medium px-6 py-3 rounded-full text-sm transition shadow-md hover:shadow-lg flex items-center gap-2">
+            <div class="flex flex-col sm:flex-row justify-center items-center gap-3 py-1">
+                <button id="btn-open-comment-modal" class="w-full sm:w-auto bg-brand-600 hover:bg-brand-700 text-white font-medium px-6 py-3 rounded-full text-xs sm:text-sm transition shadow-md flex items-center justify-center gap-2">
                     <i class="fas fa-plus-circle"></i> Adicione o seu comentário
                 </button>
-                <button id="btn-open-all-comments" class="bg-white hover:bg-stone-50 text-stone-700 font-medium px-6 py-3 rounded-full text-sm transition border border-stone-200 shadow-sm flex items-center gap-2">
+                <button id="btn-open-all-comments" class="w-full sm:w-auto bg-white hover:bg-stone-50 text-stone-700 font-medium px-6 py-3 rounded-full text-xs sm:text-sm transition border border-stone-200 shadow-sm flex items-center justify-center gap-2">
                     <i class="fas fa-comments text-brand-600"></i> Ver todos os comentários
                 </button>
             </div>
 
-            <div id="lista-avaliacoes" class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-2">
-                <p class="text-center text-stone-400 text-sm col-span-3 py-8">A carregar avaliações...</p>
+            <div id="lista-avaliacoes" class="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 pt-2">
+                <p class="text-center text-stone-400 text-xs sm:text-sm col-span-3 py-8">A carregar avaliações...</p>
             </div>
         </div>
     </section>
 
     <!-- Rodapé Completo -->
-    <footer class="bg-stone-900 text-stone-300 py-12 px-4">
+    <footer class="bg-stone-900 text-stone-300 py-10 sm:py-12 px-4">
         <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 items-center border-b border-stone-800 pb-8">
-            <div class="space-y-3">
-                <h3 class="font-serif text-2xl font-bold text-white">Ale<span class="text-brand-500">_Naildesigner</span></h3>
-                <p class="text-stone-400 text-sm max-w-sm">Especialista em Nails na região de Caeté - MG.</p>
-                <div class="flex gap-3 pt-2">
-                    <a href="https://www.instagram.com/ale.naildesigner?exln=ODZjN2xxM3BobWp3" target="_blank" class="w-10 h-10 rounded-full bg-stone-800 hover:bg-gradient-to-tr hover:from-amber-500 hover:via-rose-500 hover:to-purple-600 text-white flex items-center justify-center transition shadow-sm">
-                        <i class="fab fa-instagram text-lg"></i>
+            <div class="space-y-3 text-center md:text-left">
+                <h3 class="font-serif text-xl sm:text-2xl font-bold text-white">Ale<span class="text-brand-500">_Naildesigner</span></h3>
+                <p class="text-stone-400 text-xs sm:text-sm max-w-sm mx-auto md:mx-0">Especialista em Nails na região de Caeté - MG.</p>
+                <div class="flex justify-center md:justify-start gap-3 pt-2">
+                    <a href="https://www.instagram.com/ale.naildesigner?exln=ODZjN2xxM3BobWp3" target="_blank" class="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-stone-800 hover:bg-gradient-to-tr hover:from-amber-500 hover:via-rose-500 hover:to-purple-600 text-white flex items-center justify-center transition shadow-sm">
+                        <i class="fab fa-instagram text-base sm:text-lg"></i>
                     </a>
-                    <a href="https://www.tiktok.com/@ale.naildesigner?_r=1&_t=ZS-9AqFPGRLEKy" target="_blank" class="w-10 h-10 rounded-full bg-stone-800 hover:bg-black text-white flex items-center justify-center transition shadow-sm border border-stone-700">
-                        <i class="fab fa-tiktok text-lg"></i>
+                    <a href="https://www.tiktok.com/@ale.naildesigner?_r=1&_t=ZS-9AqFPGRLEKy" target="_blank" class="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-stone-800 hover:bg-black text-white flex items-center justify-center transition shadow-sm border border-stone-700">
+                        <i class="fab fa-tiktok text-base sm:text-lg"></i>
                     </a>
-                    <a href="https://wa.me/5531992212015?text=Ol%C3%A1%20gostaria%20de%20agenda%20minhas%20unhas%2C%20quais%20horarios%20possui%20disponiveis%3F" target="_blank" class="w-10 h-10 rounded-full bg-stone-800 hover:bg-green-600 text-white flex items-center justify-center transition shadow-sm">
-                        <i class="fab fa-whatsapp text-lg"></i>
+                    <a href="https://wa.me/5531992212015?text=Ol%C3%A1%20gostaria%20de%20agenda%20minhas%20unhas%2C%20quais%20horarios%20possui%20disponiveis%3F" target="_blank" class="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-stone-800 hover:bg-green-600 text-white flex items-center justify-center transition shadow-sm">
+                        <i class="fab fa-whatsapp text-base sm:text-lg"></i>
                     </a>
                 </div>
             </div>
 
-            <div class="space-y-2 text-left md:text-right text-sm">
+            <div class="space-y-2 text-center md:text-right text-xs sm:text-sm">
                 <p class="text-white font-medium">Contacto & Localização</p>
                 <p class="text-stone-400"><i class="fas fa-location-dot text-brand-500 mr-2"></i> Caeté - MG</p>
                 <p class="text-stone-400"><i class="fas fa-phone text-brand-500 mr-2"></i> +55 (31) 99221-2015</p>
             </div>
         </div>
 
-        <div class="max-w-6xl mx-auto pt-6 text-center text-xs text-stone-500">
+        <div class="max-w-6xl mx-auto pt-6 text-center text-[11px] sm:text-xs text-stone-500">
             &copy; 2026 Ale_Naildesigner. Todos os direitos reservados.
         </div>
     </footer>
@@ -587,16 +624,15 @@
         let fotoBase64 = "";
         let galleryBase64 = "";
 
-        // Função para mostrar Pop-up de Notificação Interno (Toast)
+        // Função Toast Notificação
         function showToast(message, type = 'success') {
             const container = document.getElementById('toast-container');
             const toast = document.createElement('div');
-            
             const bgColor = type === 'success' ? 'bg-stone-900 text-white' : 'bg-red-600 text-white';
             const icon = type === 'success' ? 'fa-check-circle text-emerald-400' : 'fa-exclamation-circle text-white';
 
-            toast.className = `pointer-events-auto flex items-center gap-3 px-4 py-3 rounded-2xl shadow-xl text-xs font-medium toast-animate ${bgColor} border border-stone-700`;
-            toast.innerHTML = `<i class="fas ${icon} text-base"></i><span>${message}</span>`;
+            toast.className = `pointer-events-auto flex items-center gap-2.5 px-4 py-3 rounded-2xl shadow-xl text-xs font-medium toast-animate ${bgColor} border border-stone-700 w-full sm:w-auto justify-center`;
+            toast.innerHTML = `<i class="fas ${icon} text-sm shrink-0"></i><span>${message}</span>`;
             
             container.appendChild(toast);
 
@@ -607,16 +643,38 @@
             }, 3500);
         }
 
+        // Menu Mobile Toggle
+        const btnToggleMenu = document.getElementById('btn-toggle-menu');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        btnToggleMenu.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        document.querySelectorAll('.mobile-nav-link').forEach(link => {
+            link.addEventListener('click', () => mobileMenu.classList.add('hidden'));
+        });
+
         // Modais
         const loginModal = document.getElementById('login-modal');
         const commentModal = document.getElementById('comment-modal');
         const allCommentsModal = document.getElementById('all-comments-modal');
         const adminModal = document.getElementById('admin-modal');
 
-        document.getElementById('btn-open-login').addEventListener('click', () => loginModal.classList.remove('hidden'));
+        const openLogin = () => loginModal.classList.remove('hidden');
+        document.getElementById('btn-open-login').addEventListener('click', openLogin);
+        document.getElementById('btn-open-login-mobile').addEventListener('click', () => {
+            mobileMenu.classList.add('hidden');
+            openLogin();
+        });
         document.getElementById('btn-close-modal').addEventListener('click', () => loginModal.classList.add('hidden'));
 
-        document.getElementById('btn-open-admin').addEventListener('click', () => adminModal.classList.remove('hidden'));
+        const openAdmin = () => adminModal.classList.remove('hidden');
+        document.getElementById('btn-open-admin').addEventListener('click', openAdmin);
+        document.getElementById('btn-open-admin-mobile').addEventListener('click', () => {
+            mobileMenu.classList.add('hidden');
+            openAdmin();
+        });
         document.getElementById('btn-close-admin').addEventListener('click', () => adminModal.classList.add('hidden'));
         const btnCloseAdminMobile = document.getElementById('btn-close-admin-mobile');
         if(btnCloseAdminMobile) btnCloseAdminMobile.addEventListener('click', () => adminModal.classList.add('hidden'));
@@ -634,7 +692,7 @@
         document.getElementById('btn-open-all-comments').addEventListener('click', () => allCommentsModal.classList.remove('hidden'));
         document.getElementById('btn-close-all-comments').addEventListener('click', () => allCommentsModal.classList.add('hidden'));
 
-        // Troca de Abas do Dashboard
+        // Abas Dashboard
         window.switchTab = function(tabName) {
             const tabs = ['overview', 'gallery', 'services'];
             tabs.forEach(t => {
@@ -656,7 +714,7 @@
         document.getElementById('tab-btn-gallery').addEventListener('click', () => switchTab('gallery'));
         document.getElementById('tab-btn-services').addEventListener('click', () => switchTab('services'));
 
-        // Toggle Auth
+        // Auth
         const toggleAuthBtn = document.getElementById('toggle-auth-mode');
         const modalTitle = document.getElementById('modal-title');
         const btnSubmitAuth = document.getElementById('btn-submit-auth');
@@ -674,19 +732,16 @@
             }
         });
 
-        // Google Login
         document.getElementById('btn-google-login').addEventListener('click', async () => {
             try {
                 await signInWithPopup(auth, googleProvider);
                 loginModal.classList.add('hidden');
                 showToast("Sessão iniciada com sucesso!");
             } catch (error) {
-                console.error("Erro no login com Google:", error);
                 showToast("Erro ao autenticar com o Google.", "error");
             }
         });
 
-        // Email/Senha Auth
         document.getElementById('form-email-auth').addEventListener('submit', async (e) => {
             e.preventDefault();
             const email = document.getElementById('auth-email').value;
@@ -706,43 +761,66 @@
             }
         });
 
-        document.getElementById('btn-logout').addEventListener('click', () => {
+        const doLogout = () => {
             signOut(auth);
             showToast("Sessão terminada.");
-        });
+        };
 
-        // Monitor Auth & Permissão Admin
+        document.getElementById('btn-logout').addEventListener('click', doLogout);
+        document.getElementById('btn-logout-mobile').addEventListener('click', doLogout);
+
         onAuthStateChanged(auth, (user) => {
             currentUser = user;
             const btnOpenLogin = document.getElementById('btn-open-login');
             const userLoggedInfo = document.getElementById('user-logged-info');
             const userDisplayName = document.getElementById('user-display-name');
+            const userDisplayNameMobile = document.getElementById('user-display-name-mobile');
+            const authMobileContainer = document.getElementById('auth-mobile-container');
+            const userLoggedInfoMobile = document.getElementById('user-logged-info-mobile');
             const nomeInput = document.getElementById('nome-cliente');
             const btnOpenAdmin = document.getElementById('btn-open-admin');
+            const btnOpenAdminMobile = document.getElementById('btn-open-admin-mobile');
 
             if (user) {
                 btnOpenLogin.classList.add('hidden');
                 userLoggedInfo.classList.remove('hidden');
                 userLoggedInfo.classList.add('flex');
                 
+                authMobileContainer.classList.add('hidden');
+                userLoggedInfoMobile.classList.remove('hidden');
+                userLoggedInfoMobile.classList.add('flex');
+
                 const nameOrEmail = user.displayName || user.email.split('@')[0];
                 userDisplayName.textContent = nameOrEmail;
+                userDisplayNameMobile.textContent = nameOrEmail;
                 nomeInput.value = nameOrEmail;
                 nomeInput.readOnly = true;
 
                 if (user.email && user.email.toLowerCase() === ADMIN_EMAIL.toLowerCase()) {
                     btnOpenAdmin.classList.remove('hidden');
                     btnOpenAdmin.classList.add('flex');
+                    btnOpenAdminMobile.classList.remove('hidden');
+                    btnOpenAdminMobile.classList.add('flex');
                 } else {
                     btnOpenAdmin.classList.add('hidden');
                     btnOpenAdmin.classList.remove('flex');
+                    btnOpenAdminMobile.classList.add('hidden');
+                    btnOpenAdminMobile.classList.remove('flex');
                 }
             } else {
                 btnOpenLogin.classList.remove('hidden');
                 userLoggedInfo.classList.add('hidden');
                 userLoggedInfo.classList.remove('flex');
+
+                authMobileContainer.classList.remove('hidden');
+                userLoggedInfoMobile.classList.add('hidden');
+                userLoggedInfoMobile.classList.remove('flex');
+
                 btnOpenAdmin.classList.add('hidden');
                 btnOpenAdmin.classList.remove('flex');
+                btnOpenAdminMobile.classList.add('hidden');
+                btnOpenAdminMobile.classList.remove('flex');
+
                 nomeInput.value = '';
                 nomeInput.readOnly = false;
             }
@@ -751,7 +829,7 @@
             carregarServicosDinamicos();
         });
 
-        // Compressor de foto para Avaliações
+        // Compressor Fotos
         const inputFoto = document.getElementById('foto-unha');
         const previewFotoContainer = document.getElementById('preview-foto-container');
         const previewFoto = document.getElementById('preview-foto');
@@ -790,7 +868,6 @@
             }
         });
 
-        // Compressor de imagem da Galeria (Painel Admin)
         const inputGalleryFile = document.getElementById('gallery-file');
         inputGalleryFile.addEventListener('change', (e) => {
             const file = e.target.files[0];
@@ -821,7 +898,6 @@
             }
         });
 
-        // Enviar Foto para a Galeria via Firestore
         document.getElementById('form-add-gallery').addEventListener('submit', async (e) => {
             e.preventDefault();
             if (!currentUser || currentUser.email.toLowerCase() !== ADMIN_EMAIL.toLowerCase()) return showToast("Acesso restrito à administração.", "error");
@@ -838,12 +914,10 @@
                 document.getElementById('form-add-gallery').reset();
                 galleryBase64 = "";
             } catch (error) {
-                console.error("Erro:", error);
                 showToast("Erro ao publicar a foto.", "error");
             }
         });
 
-        // Enviar Novo Serviço via Firestore
         document.getElementById('form-add-service').addEventListener('submit', async (e) => {
             e.preventDefault();
             if (!currentUser || currentUser.email.toLowerCase() !== ADMIN_EMAIL.toLowerCase()) return showToast("Acesso restrito à administração.", "error");
@@ -864,12 +938,10 @@
                 showToast("Novo serviço cadastrado com sucesso!");
                 document.getElementById('form-add-service').reset();
             } catch (error) {
-                console.error("Erro:", error);
                 showToast("Erro ao guardar o serviço.", "error");
             }
         });
 
-        // Carregar Galeria Dinâmica
         function carregarGaleriaDinamica() {
             const q = query(collection(db, "galeria"), orderBy("createdAt", "desc"));
             onSnapshot(q, (snapshot) => {
@@ -926,7 +998,6 @@
             });
         }
 
-        // Carregar Serviços Dinâmicos
         function carregarServicosDinamicos() {
             const q = query(collection(db, "servicos"), orderBy("createdAt", "desc"));
             onSnapshot(q, (snapshot) => {
@@ -949,13 +1020,13 @@
                     const id = docSnap.id;
 
                     container.innerHTML += `
-                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-stone-100 space-y-4 hover:shadow-md transition">
+                        <div class="bg-white p-5 sm:p-6 rounded-2xl shadow-sm border border-stone-100 space-y-3 sm:space-y-4 hover:shadow-md transition">
                             <div class="w-10 h-10 bg-brand-50 text-brand-600 rounded-xl flex items-center justify-center text-lg"><i class="${escapeHtml(data.icone)}"></i></div>
-                            <h3 class="font-bold text-lg text-stone-900">${escapeHtml(data.titulo)}</h3>
-                            <p class="text-stone-500 text-sm leading-relaxed">${escapeHtml(data.descricao)}</p>
+                            <h3 class="font-bold text-base sm:text-lg text-stone-900">${escapeHtml(data.titulo)}</h3>
+                            <p class="text-stone-500 text-xs sm:text-sm leading-relaxed">${escapeHtml(data.descricao)}</p>
                             <div class="pt-2 flex justify-between items-center border-t border-stone-100">
-                                <span class="text-xs text-stone-400">A partir de</span>
-                                <span class="font-bold text-brand-700 text-lg">${escapeHtml(data.preco)}</span>
+                                <span class="text-[11px] text-stone-400">A partir de</span>
+                                <span class="font-bold text-brand-700 text-base sm:text-lg">${escapeHtml(data.preco)}</span>
                             </div>
                         </div>
                     `;
@@ -1012,7 +1083,7 @@
             });
         });
 
-        // Form Comment Submit
+        // Form Avaliação
         const form = document.getElementById('form-avaliacao');
         const editIdInput = document.getElementById('edit-id');
 
@@ -1050,7 +1121,6 @@
                 resetCommentForm();
                 commentModal.classList.add('hidden');
             } catch (error) {
-                console.error("Erro ao salvar:", error);
                 showToast("Erro ao salvar a avaliação.", "error");
             }
         });
@@ -1089,7 +1159,7 @@
                 if (statCount) statCount.textContent = snapshot.size;
 
                 if (snapshot.empty) {
-                    const noCommentsHtml = '<p class="text-center text-stone-400 text-sm col-span-3 py-8">Nenhuma avaliação enviada ainda. Seja a primeira!</p>';
+                    const noCommentsHtml = '<p class="text-center text-stone-400 text-xs sm:text-sm col-span-3 py-8">Nenhuma avaliação enviada ainda. Seja a primeira!</p>';
                     containerPrincipal.innerHTML = noCommentsHtml;
                     containerModal.innerHTML = noCommentsHtml;
                     return;
@@ -1106,14 +1176,14 @@
 
                     let starsHtml = '';
                     for (let i = 1; i <= 5; i++) {
-                        starsHtml += `<i class="${i <= data.rating ? 'fas' : 'far'} fa-star text-amber-400 text-sm"></i>`;
+                        starsHtml += `<i class="${i <= data.rating ? 'fas' : 'far'} fa-star text-amber-400 text-xs sm:text-sm"></i>`;
                     }
 
                     const initials = getInitials(data.nome);
 
                     const cardHtml = `
-                        <div class="bg-white p-6 rounded-3xl border border-stone-100 shadow-sm hover:shadow-md transition flex flex-col justify-between space-y-4 relative">
-                            <div class="space-y-3">
+                        <div class="bg-white p-5 sm:p-6 rounded-3xl border border-stone-100 shadow-sm hover:shadow-md transition flex flex-col justify-between space-y-3 sm:space-y-4 relative">
+                            <div class="space-y-2.5 sm:space-y-3">
                                 <div class="flex justify-between items-center">
                                     <div class="flex gap-1">${starsHtml}</div>
                                     ${isOwner ? `
@@ -1124,24 +1194,24 @@
                                     ` : ''}
                                 </div>
                                 
-                                <p class="text-slate-600 italic text-sm leading-relaxed font-light">
+                                <p class="text-slate-600 italic text-xs sm:text-sm leading-relaxed font-light">
                                     ${escapeHtml(data.mensagem)}
                                 </p>
 
                                 ${data.foto ? `
-                                    <div class="pt-2">
-                                        <img src="${data.foto}" alt="Foto Unhas" class="w-full h-48 object-cover rounded-2xl border border-stone-100 shadow-inner">
+                                    <div class="pt-1">
+                                        <img src="${data.foto}" alt="Foto Unhas" class="w-full h-40 sm:h-48 object-cover rounded-2xl border border-stone-100 shadow-inner">
                                     </div>
                                 ` : ''}
                             </div>
 
-                            <div class="pt-4 border-t border-stone-100/80 flex items-center gap-3">
-                                <div class="w-10 h-10 rounded-full bg-brand-100 text-brand-700 font-bold text-xs flex items-center justify-center shrink-0">
+                            <div class="pt-3 border-t border-stone-100/80 flex items-center gap-3">
+                                <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-brand-100 text-brand-700 font-bold text-xs flex items-center justify-center shrink-0">
                                     ${initials}
                                 </div>
                                 <div class="overflow-hidden">
-                                    <h4 class="font-bold text-sm text-slate-800 truncate">${escapeHtml(data.nome)}</h4>
-                                    <p class="text-xs text-stone-400 font-normal">Cliente frequente</p>
+                                    <h4 class="font-bold text-xs sm:text-sm text-slate-800 truncate">${escapeHtml(data.nome)}</h4>
+                                    <p class="text-[10px] sm:text-xs text-stone-400 font-normal">Cliente frequente</p>
                                 </div>
                             </div>
                         </div>
