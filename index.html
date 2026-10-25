@@ -57,8 +57,8 @@
             </nav>
             <div class="flex items-center gap-3">
                 <!-- Botão Admin (Visível apenas para ale.naildesigner697@gmail.com) -->
-                <button id="btn-open-admin" class="hidden text-xs font-medium bg-brand-50 hover:bg-brand-100 text-brand-700 px-3 py-2 rounded-full transition items-center gap-2 border border-brand-200">
-                    <i class="fas fa-sliders text-brand-600"></i> Painel Admin
+                <button id="btn-open-admin" class="hidden text-xs font-medium bg-brand-600 hover:bg-brand-700 text-white px-3.5 py-2 rounded-full transition items-center gap-2 shadow-sm">
+                    <i class="fas fa-chart-line"></i> Dashboard Admin
                 </button>
 
                 <!-- Área de Perfil / Login -->
@@ -118,67 +118,184 @@
         </div>
     </div>
 
-    <!-- Modal Painel Administrador (Alê) -->
-    <div id="admin-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-3xl max-w-2xl w-full max-h-[90vh] p-6 space-y-6 shadow-2xl relative flex flex-col">
-            <div class="flex justify-between items-center border-b border-stone-100 pb-4">
-                <div>
-                    <h3 class="font-serif text-2xl font-bold text-stone-900">Painel de Controlo da Alê</h3>
-                    <p class="text-stone-500 text-xs">Adicione fotos à galeria e gerencie os seus serviços online</p>
+    <!-- Modal DASHBOARD ADMINISTRATIVO ORGANIZADO (Alê) -->
+    <div id="admin-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-3 sm:p-6">
+        <div class="bg-white rounded-3xl max-w-5xl w-full max-h-[92vh] shadow-2xl relative flex flex-col md:flex-row overflow-hidden border border-stone-100">
+            
+            <!-- Sidebar / Menu Lateral do Dashboard -->
+            <div class="w-full md:w-64 bg-stone-900 text-stone-300 p-6 flex flex-col justify-between shrink-0 space-y-6">
+                <div class="space-y-6">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <div class="w-8 h-8 rounded-xl bg-brand-600 flex items-center justify-center text-white font-bold text-sm">
+                                <i class="fas fa-crown"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-sm text-white leading-tight">Painel Admin</h3>
+                                <p class="text-[10px] text-stone-400 truncate max-w-[120px]">ale.naildesigner697@gmail.com</p>
+                            </div>
+                        </div>
+                        <button id="btn-close-admin-mobile" class="md:hidden text-stone-400 hover:text-white"><i class="fas fa-times text-lg"></i></button>
+                    </div>
+
+                    <!-- Abas de Navegação -->
+                    <nav class="space-y-1.5 text-xs font-medium">
+                        <button id="tab-btn-overview" class="tab-btn active w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition bg-stone-800 text-white">
+                            <i class="fas fa-chart-pie text-brand-500 w-4"></i> Visão Geral
+                        </button>
+                        <button id="tab-btn-gallery" class="tab-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition text-stone-400 hover:bg-stone-800 hover:text-white">
+                            <i class="fas fa-images text-brand-500 w-4"></i> Galeria de Fotos
+                        </button>
+                        <button id="tab-btn-services" class="tab-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition text-stone-400 hover:bg-stone-800 hover:text-white">
+                            <i class="fas fa-boxes-packing text-brand-500 w-4"></i> Serviços & Produtos
+                        </button>
+                    </nav>
                 </div>
-                <button id="btn-close-admin" class="text-stone-400 hover:text-stone-600 text-xl w-8 h-8 rounded-full bg-stone-100 flex items-center justify-center"><i class="fas fa-times"></i></button>
+
+                <div class="pt-4 border-t border-stone-800">
+                    <button id="btn-close-admin" class="w-full bg-stone-800 hover:bg-stone-700 text-stone-300 py-2 rounded-xl text-xs font-medium transition flex items-center justify-center gap-2">
+                        <i class="fas fa-arrow-left"></i> Voltar ao Site
+                    </button>
+                </div>
             </div>
 
-            <div class="overflow-y-auto space-y-6 pr-1 flex-grow">
-                <!-- 1. Adicionar Foto à Galeria -->
-                <div class="bg-stone-50 p-4 rounded-2xl border border-stone-200 space-y-3">
-                    <h4 class="font-bold text-sm text-stone-800 flex items-center gap-2"><i class="fas fa-images text-brand-600"></i> Adicionar Foto à Galeria (Arquivos)</h4>
-                    <form id="form-add-gallery" class="space-y-3">
-                        <div>
-                            <label class="block text-xs font-medium text-stone-600 mb-1">Título / Legenda da Unha</label>
-                            <input type="text" id="gallery-title" required placeholder="Ex: Alongamento Almond & Glitter" class="w-full px-3 py-2 text-sm rounded-lg border border-stone-300 bg-white">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-medium text-stone-600 mb-1">Escolher Foto do Dispositivo</label>
-                            <input type="file" id="gallery-file" accept="image/*" required class="w-full text-xs text-stone-500 file:mr-3 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-brand-50 file:text-brand-700 hover:file:bg-brand-100 cursor-pointer">
-                        </div>
-                        <button type="submit" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-medium py-2.5 rounded-xl text-sm transition">Publicar na Galeria</button>
-                    </form>
-                </div>
+            <!-- Conteúdo Principal do Dashboard -->
+            <div class="flex-grow p-6 overflow-y-auto bg-stone-50 space-y-6">
+                
+                <!-- ABA 1: VISÃO GERAL -->
+                <div id="tab-content-overview" class="tab-content space-y-6">
+                    <div>
+                        <h3 class="font-serif text-2xl font-bold text-stone-900">Visão Geral do Salão</h3>
+                        <p class="text-xs text-stone-500">Resumo em tempo real do seu site e portfólio</p>
+                    </div>
 
-                <!-- 2. Adicionar/Ajustar Serviços -->
-                <div class="bg-stone-50 p-4 rounded-2xl border border-stone-200 space-y-3">
-                    <h4 class="font-bold text-sm text-stone-800 flex items-center gap-2"><i class="fas fa-tags text-brand-600"></i> Adicionar / Ajustar Serviço & Preço</h4>
-                    <form id="form-add-service" class="space-y-3">
-                        <div>
-                            <label class="block text-xs font-medium text-stone-600 mb-1">Nome do Procedimento</label>
-                            <input type="text" id="service-title" required placeholder="Ex: Banho de Gel Especial" class="w-full px-3 py-2 text-sm rounded-lg border border-stone-300 bg-white">
-                        </div>
-                        <div class="grid grid-cols-2 gap-2">
+                    <!-- Cards de Estatísticas -->
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div class="bg-white p-4 rounded-2xl border border-stone-200/80 shadow-sm flex items-center justify-between">
                             <div>
-                                <label class="block text-xs font-medium text-stone-600 mb-1">Preço (Ex: R$ 120,00)</label>
-                                <input type="text" id="service-price" required placeholder="R$ 120,00" class="w-full px-3 py-2 text-sm rounded-lg border border-stone-300 bg-white">
+                                <p class="text-xs text-stone-400 font-medium">Fotos na Galeria</p>
+                                <h4 class="text-2xl font-bold text-stone-900" id="stat-gallery-count">0</h4>
                             </div>
-                            <div>
-                                <label class="block text-xs font-medium text-stone-600 mb-1">Ícone (FontAwesome)</label>
-                                <input type="text" id="service-icon" required value="fas fa-sparkles" class="w-full px-3 py-2 text-sm rounded-lg border border-stone-300 bg-white">
+                            <div class="w-10 h-10 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center text-lg">
+                                <i class="fas fa-image"></i>
                             </div>
                         </div>
-                        <div>
-                            <label class="block text-xs font-medium text-stone-600 mb-1">Descrição</label>
-                            <textarea id="service-desc" rows="2" required placeholder="Detalhes do procedimento..." class="w-full px-3 py-2 text-sm rounded-lg border border-stone-300 bg-white resize-none"></textarea>
-                        </div>
-                        <button type="submit" class="w-full bg-stone-900 hover:bg-stone-800 text-white font-medium py-2.5 rounded-xl text-sm transition">Salvar Serviço</button>
-                    </form>
-                </div>
 
-                <!-- Lista de Serviços Personalizados Cadastrados -->
-                <div class="space-y-2">
-                    <h4 class="font-bold text-xs text-stone-500 uppercase tracking-wider">Serviços Adicionados via Painel</h4>
-                    <div id="admin-services-list" class="space-y-2">
-                        <!-- Carregado via JS -->
+                        <div class="bg-white p-4 rounded-2xl border border-stone-200/80 shadow-sm flex items-center justify-between">
+                            <div>
+                                <p class="text-xs text-stone-400 font-medium">Serviços / Produtos</p>
+                                <h4 class="text-2xl font-bold text-stone-900" id="stat-services-count">0</h4>
+                            </div>
+                            <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-lg">
+                                <i class="fas fa-tags"></i>
+                            </div>
+                        </div>
+
+                        <div class="bg-white p-4 rounded-2xl border border-stone-200/80 shadow-sm flex items-center justify-between">
+                            <div>
+                                <p class="text-xs text-stone-400 font-medium">Avaliações Recebidas</p>
+                                <h4 class="text-2xl font-bold text-stone-900" id="stat-reviews-count">0</h4>
+                            </div>
+                            <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-lg">
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bloco de Ação Rápida -->
+                    <div class="bg-white p-5 rounded-2xl border border-stone-200/80 shadow-sm space-y-3">
+                        <h4 class="font-bold text-sm text-stone-900">Ações Rápidas</h4>
+                        <div class="flex flex-wrap gap-3">
+                            <button onclick="switchTab('gallery')" class="bg-brand-50 hover:bg-brand-100 text-brand-700 text-xs font-semibold px-4 py-2.5 rounded-xl border border-brand-200 transition flex items-center gap-2">
+                                <i class="fas fa-plus-circle"></i> Adicionar Foto à Galeria
+                            </button>
+                            <button onclick="switchTab('services')" class="bg-stone-100 hover:bg-stone-200 text-stone-700 text-xs font-semibold px-4 py-2.5 rounded-xl transition flex items-center gap-2">
+                                <i class="fas fa-plus"></i> Adicionar Novo Serviço
+                            </button>
+                        </div>
                     </div>
                 </div>
+
+                <!-- ABA 2: GERENCIAR GALERIA DE FOTOS -->
+                <div id="tab-content-gallery" class="tab-content hidden space-y-6">
+                    <div>
+                        <h3 class="font-serif text-2xl font-bold text-stone-900">Galeria de Trabalhos</h3>
+                        <p class="text-xs text-stone-500">Adicione novas fotos ou exclua trabalhos antigos da galeria pública</p>
+                    </div>
+
+                    <!-- Formulário de Adicionar Foto -->
+                    <div class="bg-white p-5 rounded-2xl border border-stone-200/80 shadow-sm space-y-4">
+                        <h4 class="font-bold text-sm text-stone-800 flex items-center gap-2"><i class="fas fa-upload text-brand-600"></i> Publicar Nova Foto na Galeria</h4>
+                        <form id="form-add-gallery" class="space-y-3">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <div>
+                                    <label class="block text-xs font-medium text-stone-600 mb-1">Título / Legenda</label>
+                                    <input type="text" id="gallery-title" required placeholder="Ex: Alongamento Almond com Nail Art" class="w-full px-3 py-2 text-sm rounded-lg border border-stone-300 focus:outline-none focus:border-brand-500">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-medium text-stone-600 mb-1">Escolher Foto dos Ficheiros</label>
+                                    <input type="file" id="gallery-file" accept="image/*" required class="w-full text-xs text-stone-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-brand-50 file:text-brand-700 hover:file:bg-brand-100 cursor-pointer">
+                                </div>
+                            </div>
+                            <button type="submit" class="bg-brand-600 hover:bg-brand-700 text-white font-medium px-5 py-2.5 rounded-xl text-xs transition shadow-sm flex items-center gap-2">
+                                <i class="fas fa-cloud-arrow-up"></i> Publicar Foto
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Lista de Fotos com Exclusão -->
+                    <div class="space-y-3">
+                        <h4 class="font-bold text-xs text-stone-500 uppercase tracking-wider">Fotos Publicadas na Galeria</h4>
+                        <div id="admin-gallery-grid" class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                            <!-- Carregado via JS -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ABA 3: GERENCIAR SERVIÇOS E PRODUTOS -->
+                <div id="tab-content-services" class="tab-content hidden space-y-6">
+                    <div>
+                        <h3 class="font-serif text-2xl font-bold text-stone-900">Serviços & Produtos</h3>
+                        <p class="text-xs text-stone-500">Adicione ou remova procedimentos e preços visíveis para suas clientes</p>
+                    </div>
+
+                    <!-- Formulário de Adicionar Serviço/Produto -->
+                    <div class="bg-white p-5 rounded-2xl border border-stone-200/80 shadow-sm space-y-4">
+                        <h4 class="font-bold text-sm text-stone-800 flex items-center gap-2"><i class="fas fa-plus-circle text-brand-600"></i> Cadastrar Novo Serviço / Produto</h4>
+                        <form id="form-add-service" class="space-y-3">
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                <div>
+                                    <label class="block text-xs font-medium text-stone-600 mb-1">Nome do Procedimento</label>
+                                    <input type="text" id="service-title" required placeholder="Ex: Banho de Gel Especial" class="w-full px-3 py-2 text-sm rounded-lg border border-stone-300 focus:outline-none focus:border-brand-500">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-medium text-stone-600 mb-1">Preço (Ex: R$ 120,00)</label>
+                                    <input type="text" id="service-price" required placeholder="R$ 120,00" class="w-full px-3 py-2 text-sm rounded-lg border border-stone-300 focus:outline-none focus:border-brand-500">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-medium text-stone-600 mb-1">Ícone (FontAwesome)</label>
+                                    <input type="text" id="service-icon" required value="fas fa-hand-sparkles" class="w-full px-3 py-2 text-sm rounded-lg border border-stone-300 focus:outline-none focus:border-brand-500">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-stone-600 mb-1">Descrição Curta</label>
+                                <textarea id="service-desc" rows="2" required placeholder="Explicação sucinta do procedimento..." class="w-full px-3 py-2 text-sm rounded-lg border border-stone-300 focus:outline-none focus:border-brand-500 resize-none"></textarea>
+                            </div>
+                            <button type="submit" class="bg-stone-900 hover:bg-stone-800 text-white font-medium px-5 py-2.5 rounded-xl text-xs transition shadow-sm flex items-center gap-2">
+                                <i class="fas fa-save"></i> Cadastrar Serviço
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Lista de Serviços Personalizados Cadastrados -->
+                    <div class="space-y-3">
+                        <h4 class="font-bold text-xs text-stone-500 uppercase tracking-wider">Serviços Cadastrados via Painel</h4>
+                        <div id="admin-services-list" class="space-y-2">
+                            <!-- Carregado via JS -->
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
@@ -305,7 +422,7 @@
             </div>
 
             <div id="lista-servicos-container" class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <!-- Serviços padrão mantidos estáticos -->
+                <!-- Serviços estáticos base -->
                 <div class="bg-white p-6 rounded-2xl shadow-sm border border-stone-100 space-y-4 hover:shadow-md transition">
                     <div class="w-10 h-10 bg-brand-50 text-brand-600 rounded-xl flex items-center justify-center text-lg"><i class="fas fa-hand-sparkles"></i></div>
                     <h3 class="font-bold text-lg text-stone-900">Alongamento em Gel</h3>
@@ -366,7 +483,7 @@
                     </div>
                 </div>
 
-                <!-- Novos serviços adicionados online aparecerão aqui -->
+                <!-- Novos serviços dinâmicos aparecem aqui -->
                 <div id="lista-servicos-dinamicos" class="contents"></div>
             </div>
         </div>
@@ -382,28 +499,28 @@
             </div>
 
             <div id="lista-galeria-container" class="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
-                <!-- Foto 1 estática -->
+                <!-- Foto 1 -->
                 <div class="group relative overflow-hidden rounded-2xl shadow-sm border border-stone-100 aspect-square">
                     <img src="img/magnetica.jpg" alt="Nail Art 1" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
                     <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex items-end p-4">
                         <span class="text-white text-xs font-medium">Unha Magnética</span>
                     </div>
                 </div>
-                <!-- Foto 2 estática -->
+                <!-- Foto 2 -->
                 <div class="group relative overflow-hidden rounded-2xl shadow-sm border border-stone-100 aspect-square">
                     <img src="img/manutencao_de_gel.jpg" alt="Nail Art 2" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
                     <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex items-end p-4">
                         <span class="text-white text-xs font-medium">Manutenção de Gel (30 dias)</span>
                     </div>
                 </div>
-                <!-- Foto 3 estática -->
+                <!-- Foto 3 -->
                 <div class="group relative overflow-hidden rounded-2xl shadow-sm border border-stone-100 aspect-square">
                     <img src="img/manutencao_de_gel1.jpg" alt="Nail Art 3" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
                     <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex items-end p-4">
                         <span class="text-white text-xs font-medium">Manutenção de Gel (20 dias)</span>
                     </div>
                 </div>
-                <!-- Foto 4 estática -->
+                <!-- Foto 4 -->
                 <div class="group relative overflow-hidden rounded-2xl shadow-sm border border-stone-100 aspect-square">
                     <img src="img/tradicional.jpg" alt="Nail Art 4" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
                     <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex items-end p-4">
@@ -411,7 +528,7 @@
                     </div>
                 </div>
 
-                <!-- Novas fotos adicionadas via painel aparecerão aqui -->
+                <!-- Novas fotos da galeria aparecem aqui -->
                 <div id="lista-galeria-dinamica" class="contents"></div>
             </div>
         </div>
@@ -510,6 +627,8 @@
 
         document.getElementById('btn-open-admin').addEventListener('click', () => adminModal.classList.remove('hidden'));
         document.getElementById('btn-close-admin').addEventListener('click', () => adminModal.classList.add('hidden'));
+        const btnCloseAdminMobile = document.getElementById('btn-close-admin-mobile');
+        if(btnCloseAdminMobile) btnCloseAdminMobile.addEventListener('click', () => adminModal.classList.add('hidden'));
 
         document.getElementById('btn-open-comment-modal').addEventListener('click', () => {
             if (!currentUser) {
@@ -523,6 +642,28 @@
         document.getElementById('btn-close-comment-modal').addEventListener('click', () => commentModal.classList.add('hidden'));
         document.getElementById('btn-open-all-comments').addEventListener('click', () => allCommentsModal.classList.remove('hidden'));
         document.getElementById('btn-close-all-comments').addEventListener('click', () => allCommentsModal.classList.add('hidden'));
+
+        // Troca de Abas do Dashboard
+        window.switchTab = function(tabName) {
+            const tabs = ['overview', 'gallery', 'services'];
+            tabs.forEach(t => {
+                const content = document.getElementById(`tab-content-${t}`);
+                const btn = document.getElementById(`tab-btn-${t}`);
+                if (t === tabName) {
+                    content.classList.remove('hidden');
+                    btn.classList.add('bg-stone-800', 'text-white');
+                    btn.classList.remove('text-stone-400');
+                } else {
+                    content.classList.add('hidden');
+                    btn.classList.remove('bg-stone-800', 'text-white');
+                    btn.classList.add('text-stone-400');
+                }
+            });
+        };
+
+        document.getElementById('tab-btn-overview').addEventListener('click', () => switchTab('overview'));
+        document.getElementById('tab-btn-gallery').addEventListener('click', () => switchTab('gallery'));
+        document.getElementById('tab-btn-services').addEventListener('click', () => switchTab('services'));
 
         // Toggle Auth
         const toggleAuthBtn = document.getElementById('toggle-auth-mode');
@@ -573,7 +714,7 @@
 
         document.getElementById('btn-logout').addEventListener('click', () => signOut(auth));
 
-        // Monitor Auth & Permissão de Admin
+        // Monitor Auth & Permissão Admin
         onAuthStateChanged(auth, (user) => {
             currentUser = user;
             const btnOpenLogin = document.getElementById('btn-open-login');
@@ -592,7 +733,6 @@
                 nomeInput.value = nameOrEmail;
                 nomeInput.readOnly = true;
 
-                // Ativar o botão Admin se for o e-mail da Alê
                 if (user.email && user.email.toLowerCase() === ADMIN_EMAIL.toLowerCase()) {
                     btnOpenAdmin.classList.remove('hidden');
                     btnOpenAdmin.classList.add('flex');
@@ -700,7 +840,6 @@
                 alert("Foto publicada com sucesso na galeria!");
                 document.getElementById('form-add-gallery').reset();
                 galleryBase64 = "";
-                adminModal.classList.add('hidden');
             } catch (error) {
                 console.error("Erro:", error);
                 alert("Erro ao publicar a foto.");
@@ -725,9 +864,8 @@
                     descricao: desc,
                     createdAt: serverTimestamp()
                 });
-                alert("Novo serviço adicionado com sucesso!");
+                alert("Novo serviço cadastrado com sucesso!");
                 document.getElementById('form-add-service').reset();
-                adminModal.classList.add('hidden');
             } catch (error) {
                 console.error("Erro:", error);
                 alert("Erro ao guardar o serviço.");
@@ -739,7 +877,17 @@
             const q = query(collection(db, "galeria"), orderBy("createdAt", "desc"));
             onSnapshot(q, (snapshot) => {
                 const container = document.getElementById('lista-galeria-dinamica');
+                const adminGrid = document.getElementById('admin-gallery-grid');
+                const statCount = document.getElementById('stat-gallery-count');
+
+                if (statCount) statCount.textContent = snapshot.size + 4; // 4 fotos locais + dinâmicas
+
                 container.innerHTML = '';
+                if (adminGrid) adminGrid.innerHTML = '';
+
+                if (snapshot.empty && adminGrid) {
+                    adminGrid.innerHTML = '<p class="text-xs text-stone-400 col-span-4">Nenhuma foto adicionada via painel ainda.</p>';
+                }
 
                 snapshot.forEach((docSnap) => {
                     const data = docSnap.data();
@@ -755,6 +903,18 @@
                             </div>
                         </div>
                     `;
+
+                    if (adminGrid && isAd) {
+                        adminGrid.innerHTML += `
+                            <div class="relative rounded-xl overflow-hidden border border-stone-200 aspect-square bg-stone-100 group">
+                                <img src="${data.imagem}" class="w-full h-full object-cover">
+                                <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition flex flex-col justify-between p-2">
+                                    <button class="btn-del-gallery bg-red-600 text-white w-6 h-6 rounded-full text-[10px] self-end" data-id="${id}"><i class="fas fa-trash"></i></button>
+                                    <span class="text-white text-[10px] font-medium truncate">${escapeHtml(data.titulo)}</span>
+                                </div>
+                            </div>
+                        `;
+                    }
                 });
 
                 document.querySelectorAll('.btn-del-gallery').forEach(btn => {
@@ -774,10 +934,17 @@
             onSnapshot(q, (snapshot) => {
                 const container = document.getElementById('lista-servicos-dinamicos');
                 const adminList = document.getElementById('admin-services-list');
+                const statCount = document.getElementById('stat-services-count');
                 const isAd = currentUser && currentUser.email.toLowerCase() === ADMIN_EMAIL.toLowerCase();
+
+                if (statCount) statCount.textContent = snapshot.size + 6; // 6 estáticos + dinâmicos
 
                 container.innerHTML = '';
                 if (adminList) adminList.innerHTML = '';
+
+                if (snapshot.empty && adminList) {
+                    adminList.innerHTML = '<p class="text-xs text-stone-400">Nenhum serviço extra cadastrado via painel.</p>';
+                }
 
                 snapshot.forEach((docSnap) => {
                     const data = docSnap.data();
@@ -797,9 +964,17 @@
 
                     if (adminList && isAd) {
                         adminList.innerHTML += `
-                            <div class="flex justify-between items-center bg-white p-2.5 rounded-xl border border-stone-200 text-xs">
-                                <span class="font-bold">${escapeHtml(data.titulo)} (${escapeHtml(data.preco)})</span>
-                                <button class="btn-del-service text-red-600 hover:text-red-800 font-medium px-2 py-1" data-id="${id}"><i class="fas fa-trash"></i> Excluir</button>
+                            <div class="flex justify-between items-center bg-white p-3 rounded-xl border border-stone-200 text-xs">
+                                <div class="flex items-center gap-3">
+                                    <i class="${escapeHtml(data.icone)} text-brand-600 text-sm"></i>
+                                    <div>
+                                        <h5 class="font-bold text-stone-800">${escapeHtml(data.titulo)}</h5>
+                                        <p class="text-stone-400 text-[10px]">${escapeHtml(data.preco)}</p>
+                                    </div>
+                                </div>
+                                <button class="btn-del-service bg-stone-100 hover:bg-red-50 hover:text-red-600 text-stone-500 px-3 py-1.5 rounded-lg font-medium transition flex items-center gap-1.5" data-id="${id}">
+                                    <i class="fas fa-trash-can"></i> Excluir
+                                </button>
                             </div>
                         `;
                     }
@@ -908,6 +1083,9 @@
             onSnapshot(q, (snapshot) => {
                 const containerPrincipal = document.getElementById('lista-avaliacoes');
                 const containerModal = document.getElementById('lista-avaliacoes-modal');
+                const statCount = document.getElementById('stat-reviews-count');
+
+                if (statCount) statCount.textContent = snapshot.size;
 
                 if (snapshot.empty) {
                     const noCommentsHtml = '<p class="text-center text-stone-400 text-sm col-span-3 py-8">Nenhuma avaliação enviada ainda. Seja a primeira!</p>';
