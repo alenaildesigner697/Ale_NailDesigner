@@ -173,7 +173,7 @@
                 <button id="btn-close-all-comments" class="text-stone-400 hover:text-stone-600 text-xl w-8 h-8 rounded-full bg-stone-100 flex items-center justify-center"><i class="fas fa-times"></i></button>
             </div>
 
-            <!-- Lista Rovel com Scroll -->
+            <!-- Lista Scrollável -->
             <div id="lista-avaliacoes-modal" class="overflow-y-auto space-y-4 pr-2 flex-grow max-h-[60vh]">
                 <!-- Renderização dinâmica dos comentários -->
             </div>
@@ -303,16 +303,14 @@
         </div>
     </section>
 
-    <!-- Seção Avaliações (Área Preta & Área Vermelha Conforme Solicitado) -->
+    <!-- Seção Avaliações -->
     <section id="avaliacoes" class="py-16 px-4 bg-brand-50/30">
         <div class="max-w-6xl mx-auto space-y-8">
-            <!-- Cabeçalho Principal -->
             <div class="text-center space-y-2">
                 <span class="text-brand-600 font-semibold text-xs uppercase tracking-widest bg-brand-100/70 px-3 py-1 rounded-full">Depoimentos</span>
                 <h2 class="font-serif text-3xl sm:text-4xl font-bold text-slate-800">O que dizem nossas clientes</h2>
             </div>
 
-            <!-- Área Preta da Imagem: Botões de Ação Principais -->
             <div class="flex flex-col sm:flex-row justify-center items-center gap-4 py-2">
                 <button id="btn-open-comment-modal" class="bg-brand-600 hover:bg-brand-700 text-white font-medium px-6 py-3 rounded-full text-sm transition shadow-md hover:shadow-lg flex items-center gap-2">
                     <i class="fas fa-plus-circle"></i> Adicione seu comentário
@@ -322,7 +320,6 @@
                 </button>
             </div>
 
-            <!-- Área Vermelha da Imagem: Cards com Estrelas, Comentário, Foto e Perfil -->
             <div id="lista-avaliacoes" class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-2">
                 <p class="text-center text-stone-400 text-sm col-span-3 py-8">Carregando avaliações...</p>
             </div>
@@ -335,7 +332,6 @@
             <div class="space-y-3">
                 <h3 class="font-serif text-2xl font-bold text-white">Ale<span class="text-brand-500">_Naildesigner</span></h3>
                 <p class="text-stone-400 text-sm max-w-sm">Especialista em Nails na região de Caeté - MG.</p>
-                <!-- Botões de Redes Sociais no Rodapé -->
                 <div class="flex gap-3 pt-2">
                     <a href="https://www.instagram.com/ale.naildesigner?exln=ODZjN2xxM3BobWp3" target="_blank" class="w-10 h-10 rounded-full bg-stone-800 hover:bg-gradient-to-tr hover:from-amber-500 hover:via-rose-500 hover:to-purple-600 text-white flex items-center justify-center transition shadow-sm">
                         <i class="fab fa-instagram text-lg"></i>
@@ -485,7 +481,7 @@
             carregarAvaliacoes();
         });
 
-        // Preview de Foto da Galeria (Leitura em Base64)
+        // Preview de Foto da Galeria
         const inputFoto = document.getElementById('foto-unha');
         const previewFotoContainer = document.getElementById('preview-foto-container');
         const previewFoto = document.getElementById('preview-foto');
@@ -528,7 +524,7 @@
             });
         });
 
-        // Form Comment Submit
+        // Form Comment Submit (Fecha o modal automaticamente após o envio)
         const form = document.getElementById('form-avaliacao');
         const editIdInput = document.getElementById('edit-id');
 
@@ -562,7 +558,7 @@
                     });
                 }
                 resetCommentForm();
-                commentModal.classList.add('hidden');
+                commentModal.classList.add('hidden'); // <-- Fecha o menu automaticamente aqui!
             } catch (error) {
                 console.error("Erro ao salvar:", error);
                 alert("Erro ao salvar a avaliação.");
@@ -592,7 +588,7 @@
             return name.substring(0, 2).toUpperCase();
         }
 
-        // Carregar Avaliações na Página e no Modal de Todos os Comentários
+        // Carregar Avaliações
         function carregarAvaliacoes() {
             const q = query(collection(db, "avaliacoes"), orderBy("createdAt", "desc"));
             onSnapshot(q, (snapshot) => {
@@ -609,6 +605,7 @@
                 containerPrincipal.innerHTML = '';
                 containerModal.innerHTML = '';
 
+                let count = 0;
                 snapshot.forEach((docSnapshot) => {
                     const data = docSnapshot.data();
                     const id = docSnapshot.id;
@@ -621,11 +618,9 @@
 
                     const initials = getInitials(data.nome);
 
-                    // Template Exato Solicitado: Estrelas -> Comentário -> Foto -> Perfil
                     const cardHtml = `
                         <div class="bg-white p-6 rounded-3xl border border-stone-100 shadow-sm hover:shadow-md transition flex flex-col justify-between space-y-4 relative">
                             <div class="space-y-3">
-                                <!-- Topo: Estrelas -->
                                 <div class="flex justify-between items-center">
                                     <div class="flex gap-1">${starsHtml}</div>
                                     ${isOwner ? `
@@ -636,12 +631,10 @@
                                     ` : ''}
                                 </div>
                                 
-                                <!-- Comentário -->
                                 <p class="text-slate-600 italic text-sm leading-relaxed font-light">
                                     ${escapeHtml(data.mensagem)}
                                 </p>
 
-                                <!-- Foto Opcional da Unha da Galeria -->
                                 ${data.foto ? `
                                     <div class="pt-2">
                                         <img src="${data.foto}" alt="Foto Unhas" class="w-full h-48 object-cover rounded-2xl border border-stone-100 shadow-inner">
@@ -649,7 +642,6 @@
                                 ` : ''}
                             </div>
 
-                            <!-- Perfil do Cliente -->
                             <div class="pt-4 border-t border-stone-100/80 flex items-center gap-3">
                                 <div class="w-10 h-10 rounded-full bg-brand-100 text-brand-700 font-bold text-xs flex items-center justify-center shrink-0">
                                     ${initials}
@@ -662,14 +654,15 @@
                         </div>
                     `;
 
-                    // Inserir na grade da página principal
-                    containerPrincipal.innerHTML += cardHtml;
-
-                    // Inserir no modal "Ver todos os comentários"
+                    // Mostra apenas os 3 primeiros na página principal (Área Vermelha)
+                    if (count < 3) {
+                        containerPrincipal.innerHTML += cardHtml;
+                    }
+                    // Mostra todos no modal "Ver todos os comentários"
                     containerModal.innerHTML += cardHtml;
+                    count++;
                 });
 
-                // Registrar eventos de excluir e editar em ambos os containers
                 document.querySelectorAll('.btn-delete').forEach(btn => {
                     btn.addEventListener('click', async (e) => {
                         const id = e.currentTarget.getAttribute('data-id');
