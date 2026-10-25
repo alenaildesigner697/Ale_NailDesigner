@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-PT">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -52,6 +52,7 @@
             <nav class="hidden md:flex space-x-6 text-sm font-medium text-stone-600">
                 <a href="#sobre" class="hover:text-brand-600 transition">Sobre Mim</a>
                 <a href="#servicos" class="hover:text-brand-600 transition">Serviços</a>
+                <a href="#galeria" class="hover:text-brand-600 transition">Galeria</a>
                 <a href="#avaliacoes" class="hover:text-brand-600 transition">Avaliações</a>
             </nav>
             <div class="flex items-center gap-3">
@@ -78,8 +79,8 @@
         <div class="bg-white rounded-2xl max-w-md w-full p-6 space-y-6 shadow-2xl relative">
             <button id="btn-close-modal" class="absolute top-4 right-4 text-stone-400 hover:text-stone-600 text-lg"><i class="fas fa-times"></i></button>
             <div class="text-center space-y-1">
-                <h3 class="font-serif text-2xl font-bold text-stone-900" id="modal-title">Acessar sua Conta</h3>
-                <p class="text-stone-500 text-xs">Entre para gerenciar suas avaliações no salão</p>
+                <h3 class="font-serif text-2xl font-bold text-stone-900" id="modal-title">Aceder à sua Conta</h3>
+                <p class="text-stone-500 text-xs">Entre para gerir as suas avaliações no salão</p>
             </div>
 
             <!-- Botão Google -->
@@ -100,14 +101,14 @@
                     <input type="email" id="auth-email" required placeholder="seu@email.com" class="w-full px-3 py-2 text-sm rounded-lg border border-stone-300 focus:outline-none focus:border-brand-500">
                 </div>
                 <div>
-                    <label class="block text-xs font-medium text-stone-600 mb-1">Senha</label>
+                    <label class="block text-xs font-medium text-stone-600 mb-1">Palavra-passe</label>
                     <input type="password" id="auth-password" required placeholder="••••••••" class="w-full px-3 py-2 text-sm rounded-lg border border-stone-300 focus:outline-none focus:border-brand-500">
                 </div>
                 <button type="submit" id="btn-submit-auth" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-medium py-2.5 rounded-xl text-sm transition">Entrar</button>
             </form>
 
             <div class="text-center pt-2">
-                <button type="button" id="toggle-auth-mode" class="text-xs text-brand-600 hover:underline font-medium">Não tem uma conta? Cadastre-se</button>
+                <button type="button" id="toggle-auth-mode" class="text-xs text-brand-600 hover:underline font-medium">Não tem uma conta? Registe-se</button>
             </div>
         </div>
     </div>
@@ -119,14 +120,14 @@
             
             <div class="text-center space-y-1 border-b border-stone-100 pb-3">
                 <h3 class="font-serif text-2xl font-bold text-stone-900" id="comment-modal-title">Deixar uma Avaliação</h3>
-                <p class="text-stone-500 text-xs">Compartilhe sua experiência no salão da Alê</p>
+                <p class="text-stone-500 text-xs">Partilhe a sua experiência no salão da Alê</p>
             </div>
 
             <form id="form-avaliacao" class="space-y-4">
                 <input type="hidden" id="edit-id" value="">
                 
                 <div>
-                    <label class="block text-xs font-medium text-stone-600 mb-1">Sua Nota</label>
+                    <label class="block text-xs font-medium text-stone-600 mb-1">A sua Classificação</label>
                     <div class="star-rating flex gap-2 text-amber-400 text-2xl" id="star-container">
                         <i class="far fa-star" data-rating="1"></i>
                         <i class="far fa-star" data-rating="2"></i>
@@ -137,21 +138,21 @@
                 </div>
 
                 <div>
-                    <label class="block text-xs font-medium text-stone-600 mb-1">Seu Nome</label>
-                    <input type="text" id="nome-cliente" required placeholder="Digite seu nome" class="w-full px-3 py-2 text-sm rounded-lg border border-stone-300 focus:outline-none focus:border-brand-500 bg-white">
+                    <label class="block text-xs font-medium text-stone-600 mb-1">O seu Nome</label>
+                    <input type="text" id="nome-cliente" required placeholder="Digite o seu nome" class="w-full px-3 py-2 text-sm rounded-lg border border-stone-300 focus:outline-none focus:border-brand-500 bg-white">
                 </div>
 
                 <div>
-                    <label class="block text-xs font-medium text-stone-600 mb-1">Seu Comentário</label>
-                    <textarea id="mensagem-cliente" rows="3" required placeholder="Escreva sobre suas unhas, atendimento, durabilidade..." class="w-full px-3 py-2 text-sm rounded-lg border border-stone-300 focus:outline-none focus:border-brand-500 bg-white resize-none"></textarea>
+                    <label class="block text-xs font-medium text-stone-600 mb-1">O seu Comentário</label>
+                    <textarea id="mensagem-cliente" rows="3" required placeholder="Escreva sobre as suas unhas, atendimento, durabilidade..." class="w-full px-3 py-2 text-sm rounded-lg border border-stone-300 focus:outline-none focus:border-brand-500 bg-white resize-none"></textarea>
                 </div>
 
-                <!-- Upload de Foto Opcional da Galeria (Comprimida automaticamente) -->
+                <!-- Upload de Foto Opcional -->
                 <div>
                     <label class="block text-xs font-medium text-stone-600 mb-1">Foto da sua unha (Opcional)</label>
                     <input type="file" id="foto-unha" accept="image/*" class="w-full text-xs text-stone-500 file:mr-3 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-brand-50 file:text-brand-700 hover:file:bg-brand-100 cursor-pointer">
                     <div id="preview-foto-container" class="mt-2 hidden">
-                        <img id="preview-foto" src="" alt="Preview" class="h-20 w-20 object-cover rounded-xl border border-stone-200">
+                        <img id="preview-foto" src="" alt="Pré-visualização" class="h-20 w-20 object-cover rounded-xl border border-stone-200">
                     </div>
                 </div>
 
@@ -168,14 +169,14 @@
             <div class="flex justify-between items-center border-b border-stone-100 pb-4">
                 <div>
                     <h3 class="font-serif text-2xl font-bold text-stone-900">Todas as Avaliações</h3>
-                    <p class="text-stone-500 text-xs">O que nossas clientes dizem sobre o Ale_Naildesigner</p>
+                    <p class="text-stone-500 text-xs">O que as nossas clientes dizem sobre o Ale_Naildesigner</p>
                 </div>
                 <button id="btn-close-all-comments" class="text-stone-400 hover:text-stone-600 text-xl w-8 h-8 rounded-full bg-stone-100 flex items-center justify-center"><i class="fas fa-times"></i></button>
             </div>
 
-            <!-- Lista Scrollável -->
+            <!-- Lista com Scroll -->
             <div id="lista-avaliacoes-modal" class="overflow-y-auto space-y-4 pr-2 flex-grow max-h-[60vh]">
-                <!-- Renderização dinâmica dos comentários -->
+                <!-- Renderização dinâmica -->
             </div>
         </div>
     </div>
@@ -188,7 +189,7 @@
                 Beleza, Elegância & Cuidado em Cada Detalhe
             </h1>
             <p class="text-stone-600 text-lg max-w-2xl mx-auto font-light">
-                Transforme suas unhas com técnicas avançadas em gel, segurança e acabamento impecável em Caeté-MG.
+                Transforme as suas unhas com técnicas avançadas em gel, segurança e acabamento impecável em Caeté-MG.
             </p>
             <div class="pt-4">
                 <a href="https://wa.me/5531992212015?text=Ol%C3%A1%20gostaria%20de%20agenda%20minhas%20unhas%2C%20quais%20horarios%20possui%20disponiveis%3F" target="_blank" class="inline-flex items-center gap-3 bg-stone-900 text-white px-8 py-4 rounded-full font-medium hover:bg-brand-600 transition shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 duration-200">
@@ -214,7 +215,7 @@
                 <span class="text-brand-600 font-semibold text-sm uppercase tracking-widest">Sobre Mim</span>
                 <h2 class="font-serif text-3xl font-bold text-stone-900">Olá, eu sou a Alê!</h2>
                 <p class="text-stone-600 leading-relaxed text-base">
-                    Sou apaixonada por transformar unhas e elevar a auto-estima das minhas clientes através do cuidado e da arte. Com anos de experiência em nail design, busco sempre a excelência em cada detalhe, utilizando produtos de altíssima qualidade e esterilização rigorosa para sua total segurança.
+                    Sou apaixonada por transformar unhas e elevar a auto-estima das minhas clientes através do cuidado e da arte. Com anos de experiência em nail design, busco sempre a excelência em cada detalhe, utilizando produtos de altíssima qualidade e esterilização rigorosa para a sua total segurança.
                 </p>
                 <div class="pt-2 flex flex-wrap gap-4 text-xs font-semibold text-stone-700">
                     <span class="bg-stone-100 px-3 py-1.5 rounded-lg flex items-center gap-2"><i class="fas fa-check text-brand-600"></i> Biossegurança</span>
@@ -303,17 +304,59 @@
         </div>
     </section>
 
+    <!-- NOVA SEÇÃO: Galeria de Unhas / Trabalhos -->
+    <section id="galeria" class="py-16 px-4 bg-white">
+        <div class="max-w-6xl mx-auto space-y-10">
+            <div class="text-center space-y-2">
+                <span class="text-brand-600 font-semibold text-xs uppercase tracking-widest bg-brand-50 px-3 py-1 rounded-full">Portefólio</span>
+                <h2 class="font-serif text-3xl sm:text-4xl font-bold text-stone-900">Galeria de Trabalhos</h2>
+                <p class="text-stone-500 text-sm max-w-lg mx-auto">Inspire-se com alguns dos nossos designs exclusivos e acabamentos em gel.</p>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
+                <!-- Foto 1 -->
+                <div class="group relative overflow-hidden rounded-2xl shadow-sm border border-stone-100 aspect-square">
+                    <img src="https://images.unsplash.com/photo-1632345031435-877ff6c9d7d9?q=80&w=800&auto=format&fit=crop" alt="Nail Art 1" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex items-end p-4">
+                        <span class="text-white text-xs font-medium">Baby Boomer & Glitter</span>
+                    </div>
+                </div>
+                <!-- Foto 2 -->
+                <div class="group relative overflow-hidden rounded-2xl shadow-sm border border-stone-100 aspect-square">
+                    <img src="https://images.unsplash.com/photo-1607779097040-26e80aa78e66?q=80&w=800&auto=format&fit=crop" alt="Nail Art 2" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex items-end p-4">
+                        <span class="text-white text-xs font-medium">Esmaltação Vermelha Clássica</span>
+                    </div>
+                </div>
+                <!-- Foto 3 -->
+                <div class="group relative overflow-hidden rounded-2xl shadow-sm border border-stone-100 aspect-square">
+                    <img src="https://images.unsplash.com/photo-1519014816548-bf5fe059798b?q=80&w=800&auto=format&fit=crop" alt="Nail Art 3" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex items-end p-4">
+                        <span class="text-white text-xs font-medium">Francesinha Delicada</span>
+                    </div>
+                </div>
+                <!-- Foto 4 -->
+                <div class="group relative overflow-hidden rounded-2xl shadow-sm border border-stone-100 aspect-square">
+                    <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?q=80&w=800&auto=format&fit=crop" alt="Nail Art 4" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex items-end p-4">
+                        <span class="text-white text-xs font-medium">Nail Art Minimalista</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Seção Avaliações -->
     <section id="avaliacoes" class="py-16 px-4 bg-brand-50/30">
         <div class="max-w-6xl mx-auto space-y-8">
             <div class="text-center space-y-2">
                 <span class="text-brand-600 font-semibold text-xs uppercase tracking-widest bg-brand-100/70 px-3 py-1 rounded-full">Depoimentos</span>
-                <h2 class="font-serif text-3xl sm:text-4xl font-bold text-slate-800">O que dizem nossas clientes</h2>
+                <h2 class="font-serif text-3xl sm:text-4xl font-bold text-slate-800">O que dizem as nossas clientes</h2>
             </div>
 
             <div class="flex flex-col sm:flex-row justify-center items-center gap-4 py-2">
                 <button id="btn-open-comment-modal" class="bg-brand-600 hover:bg-brand-700 text-white font-medium px-6 py-3 rounded-full text-sm transition shadow-md hover:shadow-lg flex items-center gap-2">
-                    <i class="fas fa-plus-circle"></i> Adicione seu comentário
+                    <i class="fas fa-plus-circle"></i> Adicione o seu comentário
                 </button>
                 <button id="btn-open-all-comments" class="bg-white hover:bg-stone-50 text-stone-700 font-medium px-6 py-3 rounded-full text-sm transition border border-stone-200 shadow-sm flex items-center gap-2">
                     <i class="fas fa-comments text-brand-600"></i> Ver todos os comentários
@@ -321,7 +364,7 @@
             </div>
 
             <div id="lista-avaliacoes" class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-2">
-                <p class="text-center text-stone-400 text-sm col-span-3 py-8">Carregando avaliações...</p>
+                <p class="text-center text-stone-400 text-sm col-span-3 py-8">A carregar avaliações...</p>
             </div>
         </div>
     </section>
@@ -346,7 +389,7 @@
             </div>
 
             <div class="space-y-2 text-left md:text-right text-sm">
-                <p class="text-white font-medium">Contato & Localização</p>
+                <p class="text-white font-medium">Contacto & Localização</p>
                 <p class="text-stone-400"><i class="fas fa-location-dot text-brand-500 mr-2"></i> Caeté - MG</p>
                 <p class="text-stone-400"><i class="fas fa-phone text-brand-500 mr-2"></i> +55 (31) 99221-2015</p>
             </div>
@@ -414,12 +457,12 @@
             isSignUpMode = !isSignUpMode;
             if (isSignUpMode) {
                 modalTitle.textContent = "Criar Nova Conta";
-                btnSubmitAuth.textContent = "Cadastrar";
+                btnSubmitAuth.textContent = "Registar";
                 toggleAuthBtn.textContent = "Já tem uma conta? Entre aqui";
             } else {
-                modalTitle.textContent = "Acessar sua Conta";
+                modalTitle.textContent = "Aceder à sua Conta";
                 btnSubmitAuth.textContent = "Entrar";
-                toggleAuthBtn.textContent = "Não tem uma conta? Cadastre-se";
+                toggleAuthBtn.textContent = "Não tem uma conta? Registe-se";
             }
         });
 
@@ -481,7 +524,7 @@
             carregarAvaliacoes();
         });
 
-        // Compressor automático de imagem para evitar erro de tamanho no Firestore
+        // Compressor de imagem
         const inputFoto = document.getElementById('foto-unha');
         const previewFotoContainer = document.getElementById('preview-foto-container');
         const previewFoto = document.getElementById('preview-foto');
@@ -517,7 +560,7 @@
                         const ctx = canvas.getContext('2d');
                         ctx.drawImage(img, 0, 0, width, height);
 
-                        fotoBase64 = canvas.toDataURL('image/jpeg', 0.7); // Comprime em JPEG com 70% de qualidade
+                        fotoBase64 = canvas.toDataURL('image/jpeg', 0.7);
                         previewFoto.src = fotoBase64;
                         previewFotoContainer.classList.remove('hidden');
                     };
@@ -588,7 +631,7 @@
                 commentModal.classList.add('hidden');
             } catch (error) {
                 console.error("Erro ao salvar:", error);
-                alert("Erro ao salvar a avaliação. A imagem pode ser muito pesada.");
+                alert("Erro ao salvar a avaliação. A imagem pode ser demasiado pesada.");
             }
         });
 
@@ -691,7 +734,7 @@
                 document.querySelectorAll('.btn-delete').forEach(btn => {
                     btn.addEventListener('click', async (e) => {
                         const id = e.currentTarget.getAttribute('data-id');
-                        if (confirm('Deseja realmente excluir sua avaliação?')) {
+                        if (confirm('Deseja realmente excluir a sua avaliação?')) {
                             await deleteDoc(doc(db, "avaliacoes", id));
                         }
                     });
