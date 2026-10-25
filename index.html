@@ -271,7 +271,7 @@
                 </form>
             </div>
 
-            <!-- Lista de Comentários (Estilo Caixas Grandes e Decoradas) -->
+            <!-- Lista de Comentários (Estilo Caixas Grandes e Decoradas - Sem aspas) -->
             <div id="lista-avaliacoes" class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-2">
                 <p class="text-center text-stone-400 text-sm col-span-3 py-8">Carregando avaliações...</p>
             </div>
@@ -512,7 +512,7 @@
             return name.substring(0, 2).toUpperCase();
         }
 
-        // Carregar Avaliações em Tempo Real (Estilo Idêntico à Imagem Exemplo)
+        // Carregar Avaliações em Tempo Real (Sem aspas no texto)
         function carregarAvaliacoes() {
             const q = query(collection(db, "avaliacoes"), orderBy("createdAt", "desc"));
             onSnapshot(q, (snapshot) => {
@@ -550,9 +550,9 @@
                                 ` : ''}
                             </div>
                             
-                            <!-- Meio: Texto do Comentário em Itálico -->
+                            <!-- Meio: Texto do Comentário em Itálico (Sem Aspas) -->
                             <p class="text-slate-600 italic text-sm leading-relaxed font-light">
-                                "${escapeHtml(data.mensagem)}"
+                                ${escapeHtml(data.mensagem)}
                             </p>
                         </div>
 
