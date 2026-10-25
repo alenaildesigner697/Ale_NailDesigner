@@ -9,7 +9,7 @@
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Poppins:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&display=swap" rel="stylesheet">
     
     <script>
         tailwind.config = {
@@ -236,24 +236,20 @@
     </section>
 
     <!-- Seção Avaliações (Firebase Firestore Sync) -->
-    <section id="avaliacoes" class="py-16 px-4 bg-white">
-        <div class="max-w-4xl mx-auto space-y-8">
+    <section id="avaliacoes" class="py-16 px-4 bg-brand-50/30">
+        <div class="max-w-6xl mx-auto space-y-8">
             <div class="text-center space-y-2">
-                <span class="text-brand-600 font-semibold text-sm uppercase tracking-widest">Depoimentos</span>
-                <h2 class="font-serif text-3xl font-bold text-stone-900">O que dizem os Clientes</h2>
+                <span class="text-brand-600 font-semibold text-xs uppercase tracking-widest bg-brand-100/70 px-3 py-1 rounded-full">Depoimentos</span>
+                <h2 class="font-serif text-3xl sm:text-4xl font-bold text-slate-800">O que dizem nossas clientes</h2>
             </div>
 
-            <!-- Formulário Enxuto de Avaliação -->
-            <div class="bg-stone-50 p-6 rounded-2xl border border-stone-200 max-w-xl mx-auto shadow-sm">
-                <form id="form-avaliacao" class="space-y-4">
+            <!-- Formulário Bem Compacto e Discreto -->
+            <div class="bg-white p-4 sm:p-5 rounded-2xl border border-stone-200/80 max-w-md mx-auto shadow-sm">
+                <form id="form-avaliacao" class="space-y-3">
                     <input type="hidden" id="edit-id" value="">
-                    <div>
-                        <label class="block text-xs font-medium text-stone-600 mb-1">Seu Nome</label>
-                        <input type="text" id="nome-cliente" required placeholder="Faça login ou digite seu nome" class="w-full px-3 py-2 text-sm rounded-lg border border-stone-300 focus:outline-none focus:border-brand-500 bg-white">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-medium text-stone-600 mb-1">Sua Avaliação</label>
-                        <div class="star-rating flex gap-2 text-amber-400 text-xl" id="star-container">
+                    <div class="flex items-center justify-between gap-2 border-b border-stone-100 pb-2">
+                        <span class="text-xs font-medium text-stone-500">Deixe sua nota:</span>
+                        <div class="star-rating flex gap-1.5 text-amber-400 text-lg" id="star-container">
                             <i class="far fa-star" data-rating="1"></i>
                             <i class="far fa-star" data-rating="2"></i>
                             <i class="far fa-star" data-rating="3"></i>
@@ -261,20 +257,23 @@
                             <i class="far fa-star" data-rating="5"></i>
                         </div>
                     </div>
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                        <input type="text" id="nome-cliente" required placeholder="Seu nome" class="w-full px-3 py-1.5 text-xs rounded-lg border border-stone-200 focus:outline-none focus:border-brand-500 bg-stone-50/50">
+                        <button type="submit" id="btn-submit" class="w-full bg-brand-600 text-white text-xs font-medium py-1.5 rounded-lg hover:bg-brand-700 transition">Publicar Comentário</button>
+                    </div>
+
                     <div>
-                        <label class="block text-xs font-medium text-stone-600 mb-1">Comentário</label>
-                        <textarea id="mensagem-cliente" rows="2" required placeholder="Conte como foi sua experiência..." class="w-full px-3 py-2 text-sm rounded-lg border border-stone-300 focus:outline-none focus:border-brand-500 bg-white"></textarea>
+                        <textarea id="mensagem-cliente" rows="2" required placeholder="Escreva um rápido comentário..." class="w-full px-3 py-1.5 text-xs rounded-lg border border-stone-200 focus:outline-none focus:border-brand-500 bg-stone-50/50 resize-none"></textarea>
                     </div>
-                    <div class="flex gap-2">
-                        <button type="submit" id="btn-submit" class="flex-1 bg-brand-600 text-white text-sm font-medium py-2.5 rounded-lg hover:bg-brand-700 transition">Enviar Avaliação</button>
-                        <button type="button" id="btn-cancel" class="hidden bg-stone-300 text-stone-700 text-sm font-medium px-4 py-2.5 rounded-lg hover:bg-stone-400 transition">Cancelar</button>
-                    </div>
+                    
+                    <button type="button" id="btn-cancel" class="hidden w-full bg-stone-200 text-stone-700 text-xs font-medium py-1 rounded-lg hover:bg-stone-300 transition">Cancelar Edição</button>
                 </form>
             </div>
 
-            <!-- Lista de Comentários -->
-            <div id="lista-avaliacoes" class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4">
-                <p class="text-center text-stone-400 text-sm col-span-2 py-4">Carregando avaliações...</p>
+            <!-- Lista de Comentários (Estilo Caixas Grandes e Decoradas) -->
+            <div id="lista-avaliacoes" class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-2">
+                <p class="text-center text-stone-400 text-sm col-span-3 py-8">Carregando avaliações...</p>
             </div>
         </div>
     </section>
@@ -499,17 +498,27 @@
             if(currentUser) {
                 document.getElementById('nome-cliente').value = currentUser.displayName || currentUser.email.split('@')[0];
             }
-            btnSubmit.textContent = "Enviar Avaliação";
+            btnSubmit.textContent = "Publicar Comentário";
             btnCancel.classList.add('hidden');
         }
 
-        // Carregar Avaliações em Tempo Real
+        // Função para gerar as iniciais do nome (ex: Cassia Ferreira -> CF)
+        function getInitials(name) {
+            if (!name) return "CL";
+            const parts = name.trim().split(' ');
+            if (parts.length >= 2) {
+                return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+            }
+            return name.substring(0, 2).toUpperCase();
+        }
+
+        // Carregar Avaliações em Tempo Real (Estilo Idêntico à Imagem Exemplo)
         function carregarAvaliacoes() {
             const q = query(collection(db, "avaliacoes"), orderBy("createdAt", "desc"));
             onSnapshot(q, (snapshot) => {
                 const container = document.getElementById('lista-avaliacoes');
                 if (snapshot.empty) {
-                    container.innerHTML = '<p class="text-center text-stone-400 text-sm col-span-2 py-4">Nenhuma avaliação enviada ainda. Seja a primeira!</p>';
+                    container.innerHTML = '<p class="text-center text-stone-400 text-sm col-span-3 py-8">Nenhuma avaliação enviada ainda. Seja a primeira!</p>';
                     return;
                 }
 
@@ -521,25 +530,42 @@
 
                     let starsHtml = '';
                     for (let i = 1; i <= 5; i++) {
-                        starsHtml += `<i class="${i <= data.rating ? 'fas' : 'far'} fa-star text-amber-400 text-xs"></i>`;
+                        starsHtml += `<i class="${i <= data.rating ? 'fas' : 'far'} fa-star text-amber-400 text-sm"></i>`;
                     }
 
+                    const initials = getInitials(data.nome);
+
                     const card = document.createElement('div');
-                    card.className = "bg-stone-50 p-4 rounded-xl border border-stone-200 relative space-y-2";
+                    card.className = "bg-white p-6 rounded-3xl border border-stone-100 shadow-sm hover:shadow-md transition flex flex-col justify-between space-y-6 relative";
                     card.innerHTML = `
-                        <div class="flex justify-between items-start">
-                            <div>
-                                <h4 class="font-bold text-sm text-stone-800">${escapeHtml(data.nome)}</h4>
+                        <!-- Topo: Estrelas & Botões de Gerenciamento -->
+                        <div class="space-y-4">
+                            <div class="flex justify-between items-center">
                                 <div class="flex gap-1">${starsHtml}</div>
+                                ${isOwner ? `
+                                    <div class="flex gap-2 bg-stone-50 px-2 py-1 rounded-full border border-stone-200">
+                                        <button class="btn-edit text-stone-400 hover:text-brand-600 text-xs" data-id="${id}" data-nome="${escapeHtml(data.nome)}" data-mensagem="${escapeHtml(data.mensagem)}" data-rating="${data.rating}" title="Editar"><i class="fas fa-pen"></i></button>
+                                        <button class="btn-delete text-stone-400 hover:text-red-600 text-xs" data-id="${id}" title="Excluir"><i class="fas fa-trash"></i></button>
+                                    </div>
+                                ` : ''}
                             </div>
-                            ${isOwner ? `
-                                <div class="flex gap-2">
-                                    <button class="btn-edit text-stone-400 hover:text-brand-600 text-xs" data-id="${id}" data-nome="${escapeHtml(data.nome)}" data-mensagem="${escapeHtml(data.mensagem)}" data-rating="${data.rating}"><i class="fas fa-pen"></i></button>
-                                    <button class="btn-delete text-stone-400 hover:text-red-600 text-xs" data-id="${id}"><i class="fas fa-trash"></i></button>
-                                </div>
-                            ` : ''}
+                            
+                            <!-- Meio: Texto do Comentário em Itálico -->
+                            <p class="text-slate-600 italic text-sm leading-relaxed font-light">
+                                "${escapeHtml(data.mensagem)}"
+                            </p>
                         </div>
-                        <p class="text-stone-600 text-xs leading-relaxed">${escapeHtml(data.mensagem)}</p>
+
+                        <!-- Rodapé do Card: Avatar em Círculo + Nome + Subtítulo -->
+                        <div class="pt-4 border-t border-stone-100/80 flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-full bg-brand-100 text-brand-700 font-bold text-xs flex items-center justify-center shrink-0">
+                                ${initials}
+                            </div>
+                            <div class="overflow-hidden">
+                                <h4 class="font-bold text-sm text-slate-800 truncate">${escapeHtml(data.nome)}</h4>
+                                <p class="text-xs text-stone-400 font-normal">Cliente frequente</p>
+                            </div>
+                        </div>
                     `;
                     container.appendChild(card);
                 });
@@ -561,7 +587,7 @@
                         document.getElementById('mensagem-cliente').value = target.getAttribute('data-mensagem');
                         selectedRating = parseInt(target.getAttribute('data-rating'));
                         updateStars(selectedRating);
-                        btnSubmit.textContent = "Atualizar Avaliação";
+                        btnSubmit.textContent = "Atualizar Comentário";
                         btnCancel.classList.remove('hidden');
                         window.location.hash = "#avaliacoes";
                     });
